@@ -1,0 +1,29 @@
+<head>
+    <script type="text/javascript" src="http://platform.linkedin.com/in.js">
+        api_key: 77 jha1j50zl7wa
+        onLoad: onload
+        authorize: true
+    </script>
+
+    <script type="text/javascript">
+        function onload() {
+            console.log("logging in");
+            IN.Event.on(IN, "auth", onLinkedInAuth);
+        }
+
+        function onLinkedInAuth() {
+            IN.API.Raw().url('/people/~:(id,first-name,skills,educations,languages,date-of-birth,certifications,last-modified-timestamp,interests,positions,proposal-comments,associations,publications,patents,courses,volunteer,num-recommenders,recommendations-received,honors-awards)?format=json').result(function displayProfiles(profile) {
+                addProfile(profile);
+                $rootScope.
+                console.log(profiles);
+            });
+        }
+    </script>
+</head>
+<h1>Welcome, Dolan.</h1>
+
+
+<script type="IN/Login"></script>
+Working {{ currentProfile }}
+
+<button class="btn btn-lg btn-primary" ng-click="updateProfile()">Update LinkedIn profile</button>
