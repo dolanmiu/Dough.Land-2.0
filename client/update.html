@@ -49,14 +49,19 @@
         <h2>Pull from LinkedIn:</h2>
         <textarea id="currentProfileBox" rows="10" style="width:100%"></textarea>
         <button class="btn btn-primary btn-lg" ng-click="addProfile()">Add Profile</button>
+        <a ng-href="/api/cv"><button class="btn btn-primary btn-lg">Create CV</button></a>
+
         <h2>Stored Profiles:</h2>
         <div ng-repeat="profile in profiles">
-            <div class="row">
+            <div class="row form-group">
                 <div class="col-lg-9 col-xs-9">
-                    {{ profile.lastModifiedTimestamp | date:'yyyy-MM-dd HH:mm:ss Z' }}
+                    {{ profile.lastModifiedTimestamp | date:'yyyy-MM-dd HH:mm:ss Z' }}<span ng-show="profile.default"> (Default)</span>
                 </div>
-                <div class="col-lg-2 col-xs-1">
-                    <button class="btn btn-block btn-default" ng-click="setDefaultProfile(profile)">Set default</button>
+                <div class="col-lg-2 col-xs-1" ng-hide="profile.default">
+                    <button class="btn btn-block btn-success" ng-click="setDefaultProfile(profile, true)">Set default</button>
+                </div>
+                <div class="col-lg-2 col-xs-1" ng-show="profile.default">
+                    <button class="btn btn-block btn-warning" ng-click="setDefaultProfile(profile, false)">Un-set default</button>
                 </div>
                 <div class="col-lg-1 col-xs-1">
                     <button class="btn btn-block btn-danger" ng-click="deleteProfile(profile)">Remove</button>
