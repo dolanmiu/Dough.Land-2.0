@@ -119,8 +119,8 @@ var LinkedinSchema = new Schema({
             }]
         }
     },
-    info: String,
-    active: Boolean
+    default: Boolean,
+    getDate: Date
 });
 
 module.exports = mongoose.model('Linkedin', LinkedinSchema);
