@@ -37,6 +37,19 @@ var LinkedinSchema = new Schema({
         }]
     },
     firstName: String,
+    lastName: String,
+    formattedName: String,
+    summary: String,
+    pictureUrl: String,
+    publicProfileUrl: String,
+    industry: String,
+    emailAddress: String,
+    phoneNumbers: {
+        value: [{
+            phoneNumber: String,
+            phoneType: String
+        }]
+    },
     honorsAwards: {
         values: [{
             id: Number,
