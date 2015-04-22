@@ -32,6 +32,9 @@ angular.module('doughlandApp').controller('UpdateController', function ($scope, 
     $scope.setDefaultProfile = function (profile, isDefault) {
         profile.default = isDefault;
         updateProfile(profile);
+        $http.get('/api/linkedin/getDefault').success(function (data) {
+            console.log(data); 
+        });
     };
 
     $scope.$on('$destroy', function () {
