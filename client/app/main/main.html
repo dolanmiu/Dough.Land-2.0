@@ -1,14 +1,14 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <header class="hero-unit" id="banner">
-  <div class="container">
-    <h1>'Allo, 'Allo!</h1>
-    <p class="lead">Kick-start your next web app with Angular Fullstack</p>
-    <img src="assets/images/yeoman.png" alt="I'm Yeoman">
-  </div>
+    <div class="container">
+        <h1>'Allo, 'Allo!</h1>
+        <p class="lead">Kick-start your next web app with Angular Fullstack</p>
+        <img src="assets/images/yeoman.png" alt="I'm Yeoman">
+    </div>
 </header>
 
-<div class="container">
+<!--<div class="container">
   <div class="row">
     <div class="col-lg-12">
       <h1 class="page-header">Features:</h1>
@@ -27,12 +27,98 @@
       </span>
     </p>
   </form>
+</div>-->
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            {{ profile.emailAddress }}
+        </div>
+        <div class="col-lg-4">
+            {{ profile.phoneNumbers.values[0].phoneNumber }}
+        </div>
+        <div class="col-lg-4">
+            {{ location }}
+        </div>
+    </div>
 </div>
 
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>{{ profile.formattedName }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <img ng-src="{{ profile.pictureUrl }}" />
+        </div>
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-6">
+            {{ profile.summary }}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>My Stats</h1>
+        </div>
+    </div>
+    {{ gitHub }}
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Resume</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3" style="height:200px">
+            Education
+        </div>
+        <div ng-repeat="education in profile.educations.values">
+            <div class="col-lg-6">
+                {{ education.fieldOfStudy }} - {{ education.degree }}
+                <hr>
+            </div>
+            <div class="col-lg-3">
+                {{ education.schoolName }}
+                <br> {{ education.startDate.year }} - {{ education.endDate.year }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3" style="height:600px">
+            Experience
+        </div>
+        <div ng-repeat="position in profile.positions.values">
+            <div class="col-lg-6">
+                {{ position.title }}
+                <br> {{ position.summary }}
+                <hr>
+            </div>
+            <div class="col-lg-3">
+                {{ position.company.name }}
+                <br> {{ position.startDate.month }}/{{ position.startDate.year }} -
+                <span ng-if="position.isCurrent">Present</span>
+                <span ng-if="!position.isCurrent">{{ position.endDate.month }}/{{ position.endDate.year }}</span>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-lg btn-success">Generate CV</button>
+</div>
+
+
 <footer class="footer">
-  <div class="container">
-      <p>Angular Fullstack v2.0.13 |
-        <a href="https://twitter.com/tyhenkel">@tyhenkel</a> |
-         <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open">Issues</a></p>
-  </div>
+    <div class="container">
+        <p>Angular Fullstack v2.0.13 |
+            <a href="https://twitter.com/tyhenkel">@tyhenkel</a> |
+            <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open">Issues</a>
+        </p>
+    </div>
 </footer>

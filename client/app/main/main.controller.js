@@ -1,5 +1,5 @@
 /*globals angular */
-angular.module('doughlandApp').controller('MainCtrl', function ($scope, $http, socket) {
+angular.module('doughlandApp').controller('MainCtrl', function ($rootScope, $scope, $http, socket) {
     'use strict';
     $scope.awesomeThings = [];
 
@@ -25,4 +25,7 @@ angular.module('doughlandApp').controller('MainCtrl', function ($scope, $http, s
     $scope.$on('$destroy', function () {
         socket.unsyncUpdates('thing');
     });
+    
+    $scope.profile = $rootScope.profile;
+    $scope.gitHub = $rootScope.gitHub;
 });
