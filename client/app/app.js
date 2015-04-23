@@ -29,13 +29,11 @@ angular.module('doughlandApp').run(function ($rootScope, LinkedIn, GitHub) {
 });
 
 angular.module('doughlandApp').factory('LinkedIn', function ($resource) {
-    'use strict';
     return $resource('/api/linkedin/:Id', {
         Id: '@id'
     });
 });
 
 angular.module('doughlandApp').factory('GitHub', function ($resource) {
-    'use strict';
-    return $resource('https://www.kimonolabs.com/api/azqq1x7m?apikey=0dc941efa2f0a2807d63c75b5010706f');
+    return $resource('https://www.kimonolabs.com/api/b73q9q58?apikey=0dc941efa2f0a2807d63c75b5010706f');
 });
