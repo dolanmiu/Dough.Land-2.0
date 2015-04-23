@@ -45,7 +45,7 @@ var LinkedinSchema = new Schema({
     industry: String,
     emailAddress: String,
     phoneNumbers: {
-        value: [{
+        values: [{
             phoneNumber: String,
             phoneType: String
         }]
@@ -80,6 +80,10 @@ var LinkedinSchema = new Schema({
             startDate: {
                 month: Number,
                 year: Number
+            },
+            endDate: {
+                month: Number,
+                year: Number   
             },
             summary: String,
             title: String
