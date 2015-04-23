@@ -12,6 +12,7 @@ function getCvJson(callback, failure) {
     }, {}, function (err, linkedin) {
         if (!linkedin) {
             failure();
+            return;
         }
         callback(linkedin);
     });
@@ -39,11 +40,9 @@ exports.index = function (req, res) {
     getCvJson(function (linkedinJson) {
 
 
-        addHeader(docx, linkedinJson.formattedName, linkedinJson.phoneNumbers.values[0].phoneNumber, linkedinJson.publicProfileUrl, linkedinJson.emailAddress);
-
-        //addExperience();
-        
-        add
+        //addHeader(docx, linkedinJson.formattedName, linkedinJson.phoneNumbers.values[0].phoneNumber, linkedinJson.publicProfileUrl, linkedinJson.emailAddress);
+        //addExperience();        
+        //add
 
 
         res.writeHead(200, {
@@ -52,10 +51,6 @@ exports.index = function (req, res) {
         });
         return docx.generate(res);
     }, function () {
-        return res.send(404);
+        return res.send(500, 'No Default CV Present');
     });
 };
-
-function handleError(res, err) {
-    return res.send(500, err);
-}
