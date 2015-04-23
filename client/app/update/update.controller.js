@@ -1,4 +1,4 @@
-/*globals angular, IN */
+/*globals angular */
 angular.module('doughlandApp').controller('UpdateController', function ($scope, $http, socket) {
     'use strict';
 
@@ -9,7 +9,7 @@ angular.module('doughlandApp').controller('UpdateController', function ($scope, 
 
     function updateProfile(profile) {
         $http.put('/api/linkedin/' + profile._id, profile);
-    };
+    }
 
     $scope.addProfile = function () {
         var profile = document.getElementById('currentProfileBox').value;
@@ -33,7 +33,7 @@ angular.module('doughlandApp').controller('UpdateController', function ($scope, 
         profile.default = isDefault;
         updateProfile(profile);
         $http.get('/api/linkedin/getDefault').success(function (data) {
-            console.log(data); 
+            console.log(data);
         });
     };
 
