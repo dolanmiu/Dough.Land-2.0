@@ -13,23 +13,14 @@ angular.module('doughlandApp').config(function ($stateProvider, $urlRouterProvid
     $urlRouterProvider.otherwise('/');
 
     $locationProvider.html5Mode(true);
-
-    $stateProvider.state('home', {
-        url: '/',
-        templateUrl: 'app/main/main.html'
-    });
 });
 
-angular.module('doughlandApp').run(function ($rootScope, LinkedIn, GitHub) {
+angular.module('doughlandApp').run(function ($rootScope, LinkedIn) {
     LinkedIn.get({
         Id: 'getDefault'
     }, function (profile) {
         $rootScope.profile = profile;
         console.log(profile);
-    });
-
-    GitHub.get({}, function (gitHub) {
-        $rootScope.gitHub = gitHub;
     });
 });
 
@@ -40,5 +31,5 @@ angular.module('doughlandApp').factory('LinkedIn', function ($resource) {
 });
 
 angular.module('doughlandApp').factory('GitHub', function ($resource) {
-    return $resource('https://www.kimonolabs.com/api/b73q9q58?apikey=0dc941efa2f0a2807d63c75b5010706f');
+    return $resource('/api/github/');
 });
