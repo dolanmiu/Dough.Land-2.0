@@ -13,6 +13,11 @@ angular.module('doughlandApp').config(function ($stateProvider, $urlRouterProvid
     $urlRouterProvider.otherwise('/');
 
     $locationProvider.html5Mode(true);
+
+    $stateProvider.state('home', {
+        url: '/',
+        templateUrl: 'app/main/main.html'
+    });
 });
 
 angular.module('doughlandApp').run(function ($rootScope, LinkedIn, GitHub) {
