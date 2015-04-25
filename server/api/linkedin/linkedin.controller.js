@@ -84,7 +84,7 @@ exports.getDefault = function (req, res) {
             return handleError(res, err);
         }
         if (!linkedin) {
-            return res.send(404);
+            return res.send(500, 'No Default CV Present');
         }
         res.json(linkedin);
     });
