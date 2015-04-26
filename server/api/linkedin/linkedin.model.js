@@ -40,7 +40,9 @@ var LinkedinSchema = new Schema({
     lastName: String,
     formattedName: String,
     summary: String,
-    pictureUrl: String,
+    pictureUrls: {
+        values: []
+    },
     publicProfileUrl: String,
     industry: String,
     emailAddress: String,

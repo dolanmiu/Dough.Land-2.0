@@ -30,7 +30,7 @@
         }
 
         function onLinkedInAuth() {
-            IN.API.Raw().url('/people/~:(id,first-name,last-name,formatted-name,summary,picture-url,public-profile-url,industry,email-address,phone-numbers,skills,educations,languages,date-of-birth,certifications,last-modified-timestamp,interests,positions,proposal-comments,associations,publications,patents,courses,volunteer,num-recommenders,recommendations-received,honors-awards)?format=json').result(function displayProfiles(profile) {
+            IN.API.Raw().url('/people/~:(id,first-name,last-name,formatted-name,summary,picture-urls::(original),public-profile-url,industry,email-address,phone-numbers,skills,educations,languages,date-of-birth,certifications,last-modified-timestamp,interests,positions,proposal-comments,associations,publications,patents,courses,volunteer,num-recommenders,recommendations-received,honors-awards)?format=json').result(function displayProfiles(profile) {
                 document.getElementById('currentProfileBox').value = JSON.stringify(profile);
                 console.log(profile);
             });
