@@ -35,7 +35,6 @@
     <TypeScriptCompile Include="scene\commentModal.ts" />
     <TypeScriptCompile Include="scene\main.ts" />
     <TypeScriptCompile Include="scene\mesh\meshModel.ts" />
-    <TypeScriptCompile Include="scene\mesh\physicsModel.ts" />
     <TypeScriptCompile Include="scene\comment\userData.ts" />
     <TypeScriptCompile Include="scene\mouseState.ts" />
   </ItemGroup>
@@ -75,9 +74,10 @@
   </ProjectExtensions>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
-    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
     <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
-    <TypeScriptOutFile>..\3dScene.js</TypeScriptOutFile>
+    <TypeScriptOutFile>app.js</TypeScriptOutFile>
+    <TypeScriptOutDir>C:\Users\Dolan\Documents\GitHub\dough.land 2.0\client\components\3dscene</TypeScriptOutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>

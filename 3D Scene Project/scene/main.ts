@@ -4,10 +4,10 @@ module DoughLand {
         private static mouseVector: THREE.Vector3;
         private static raycaster: THREE.Raycaster;
         private static objects: Array<THREE.Object3D>;
-        public static scene: Physijs.Scene;
+        public static scene: THREE.Scene;
         public static camera: THREE.PerspectiveCamera;
         public static renderer: THREE.WebGLRenderer;
-        public static controls: THREE.OrbitControls;
+        //public static controls: THREE.OrbitControls;
         private static ableToComment: boolean;
         private static commentModal: CommentModal;
         private static mouseState: MouseState;
@@ -45,14 +45,14 @@ module DoughLand {
             //scene.add(light2);
         }
 
-        private static createOrbitalControls(camera: THREE.Camera, domElement: HTMLElement): THREE.OrbitControls {
+        /*private static createOrbitalControls(camera: THREE.Camera, domElement: HTMLElement): THREE.OrbitControls {
             var controls = new THREE.OrbitControls(camera, domElement);
             controls.maxPolarAngle = Math.PI * 5 / 12;
             controls.minPolarAngle = Math.PI * 3 / 12;
             controls.minDistance = 200;
             controls.maxDistance = 300;
             return controls;
-        }
+        }*/
 
         private static addListeners(renderer: THREE.Renderer, camera: THREE.PerspectiveCamera): void {
             window.addEventListener('resize', function () {
@@ -64,7 +64,7 @@ module DoughLand {
             });
 
 
-            renderer.domElement.addEventListener('mouseup', (event) => {
+            renderer.domElement.addEventListener('mouseup',(event) => {
                 event.preventDefault();
                 var intersects = Main.raycaster.intersectObjects(Main.objects);
 
@@ -82,12 +82,12 @@ module DoughLand {
                 this.mouseState.setIsLeftPressed(false);
             }, false);
 
-            renderer.domElement.addEventListener('mousedown', (event) => {
+            renderer.domElement.addEventListener('mousedown',(event) => {
                 this.mouseState.setIsLeftPressed(true);
                 this.mouseState.setIsMouseMoved(false);
             }, false);
 
-            renderer.domElement.addEventListener('mousemove', (event) => {
+            renderer.domElement.addEventListener('mousemove',(event) => {
                 this.mouseState.setIsMouseMoved(true);
                 Main.mouseVector.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
                 Main.mouseVector.unproject(camera);
@@ -115,7 +115,7 @@ module DoughLand {
             //console.log(camera.position);
         }*/
 
-        public static initSky(): void {
+        private static initSky(): void {
             var sphereGeometry = new THREE.SphereGeometry(3000, 60, 40);
             var uniforms = {
                 texture: {
@@ -131,46 +131,12 @@ module DoughLand {
             var skyBox = new THREE.Mesh(sphereGeometry, material);
             skyBox.scale.set(-1, 1, 1);
             skyBox.rotation.order = 'XYZ';
-            skyBox.renderDepth = 1000.0;
+            //skyBox.renderDepth = 1000.0;
             this.scene.add(skyBox);
         }
 
-        public static main(): void {
-            Physijs.scripts.ammo = '/js/ammo.js';
-            Physijs.scripts.worker = '/js/physijs_worker.js';
-            console.log('finished loading physijs');
-
-            var loader = new THREE.JSONLoader();
-
-            this.scene = new Physijs.Scene();
-            this.scene.setGravity(new THREE.Vector3(0, -50, 0)); // set gravity
-            this.scene.addEventListener('update', () => {
-                this.scene.simulate(undefined, 2);
-            });
-
-            var WIDTH = window.innerWidth,
-                HEIGHT = window.innerHeight;
-
-            this.renderer = new THREE.WebGLRenderer({
-                antialias: true
-            });
-
-            this.renderer.setSize(WIDTH, HEIGHT);
-            this.renderer.shadowMapEnabled = true;
-            this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
-            this.renderer.setClearColor(0xFFFFFF, 1);
-
-            $("#main").html(this.renderer.domElement);
-            //document.body.appendChild(renderer.domElement);
-
-            this.camera = new THREE.PerspectiveCamera(100, WIDTH / HEIGHT, 0.1, 20000);
-            this.camera.position.set(0, 66, 248);
-            this.scene.add(this.camera);
-            var meshCreator = new MeshCreator(loader);
-            Main.createFloor(this.scene, meshCreator);
-            Main.createDMObject(this.scene, loader);
-            Main.createLights(this.scene);
-            this.controls = Main.createOrbitalControls(this.camera, this.renderer.domElement);
+        private static loadMisc(meshCreator: MeshCreator): void {
+            //this.controls = Main.createOrbitalControls(this.camera, this.renderer.domElement);
 
             this.mouseVector = new THREE.Vector3();
             this.raycaster = new THREE.Raycaster();
@@ -178,31 +144,70 @@ module DoughLand {
             var commentFactory = new CommentFactory(meshCreator);
             var commentDataService = new CommentDataService(this.scene, commentFactory);
             commentDataService.ajaxGetMessages();
-            var authentication = new Authentication();
+            /*var authentication = new Authentication();
             authentication.authenticate(res => {
                 this.ableToComment = res;
-            });
-
-            this.scene.simulate();
+            });*/
 
             Main.addListeners(this.renderer, this.camera);
 
             //this.scene.fog = new THREE.Fog(0xffffff, 1, 100);
 
-            this.commentModal = new CommentModal(commentDataService, authentication);
+            //this.commentModal = new CommentModal(commentDataService, authentication);
             this.mouseState = new MouseState();
+        }
+
+        private static setupCamera(): void {
+            this.camera = new THREE.PerspectiveCamera(100);
+            this.camera.near = 0.1;
+            this.camera.far = 20000;
+            this.camera.position.set(0, 66, 248);
+            this.scene.add(this.camera);
+        }
+
+        public static setSize(width:number, height:number): void {
+            this.renderer.setSize(width, height);
+            this.camera.aspect = width / height;
+            this.camera.updateProjectionMatrix();
+        }
+
+        public static main(): void {
+            var loader = new THREE.JSONLoader();
+
+            this.scene = new THREE.Scene();
+
+
+
+            this.renderer = new THREE.WebGLRenderer({
+                antialias: true
+            });
+
+            this.renderer.shadowMapEnabled = true;
+            this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
+            this.renderer.setClearColor(0xFFFFFF, 1);
+
+            //$("#main").html(this.renderer.domElement);
+            //document.body.appendChild(this.renderer.domElement);
+            document.getElementById("main").appendChild(this.renderer.domElement);
+
+            this.setupCamera();
+
+            var meshCreator = new MeshCreator(loader);
+            Main.createFloor(this.scene, meshCreator);
+            Main.createDMObject(this.scene, loader);
+            Main.createLights(this.scene);
             //this.initSky();
         }
     }
 }
 
-window.onload = () => {
+/*window.onload = () => {
     DoughLand.Main.main();
     (function gameloop() {
 
         // stats.update();
         DoughLand.Main.renderer.render(DoughLand.Main.scene, DoughLand.Main.camera);
-        DoughLand.Main.controls.update();
+        //DoughLand.Main.controls.update();
         window.requestAnimationFrame(gameloop);
     })();
-};
+};*/

@@ -6,7 +6,8 @@ angular.module('doughlandApp', [
   'ngSanitize',
   'btford.socket-io',
   'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'sticky'
 ]);
 
 angular.module('doughlandApp').config(function ($stateProvider, $urlRouterProvider, $locationProvider) {

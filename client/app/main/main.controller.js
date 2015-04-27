@@ -1,5 +1,5 @@
-/*globals angular */
-angular.module('doughlandApp').controller('MainCtrl', function ($rootScope, $scope, $http, socket, GitHub) {
+/*globals angular, DoughLand */
+angular.module('doughlandApp').controller('MainCtrl', function ($rootScope, $scope, $http, $window, socket, GitHub) {
     'use strict';
     $scope.awesomeThings = [];
 
@@ -36,7 +36,7 @@ angular.module('doughlandApp').controller('MainCtrl', function ($rootScope, $sco
         date = new Date(milliseconds);
         m = date.getMinutes();
         s = date.getSeconds();
-        
+
 
         return {
             minutes: m,
@@ -44,9 +44,16 @@ angular.module('doughlandApp').controller('MainCtrl', function ($rootScope, $sco
         };
     }
 
-
     GitHub.get({}, function (gitHub) {
         $scope.gitHub = gitHub;
         $scope.gitHubTime = getlastUpdateTime(gitHub.thisversionrun);
     });
+
+    DoughLand.Main.main();
+    DoughLand.Main.setSize($window.innerWidth, $window.innerHeight - 70);
+    (function gameloop() {
+
+        DoughLand.Main.renderer.render(DoughLand.Main.scene, DoughLand.Main.camera);
+        window.requestAnimationFrame(gameloop);
+    })();
 });
