@@ -367,7 +367,13 @@ var DoughLand;
         Main.run = function (target) {
             this.main();
             target.appendChild(this.renderer.domElement);
+            var zero = new THREE.Vector3(0, 0, 0);
+            var clock = new THREE.Clock();
             (function gameloop() {
+                DoughLand.Main.renderer.render(DoughLand.Main.scene, DoughLand.Main.camera);
+                DoughLand.Main.camera.position.x = 248 * Math.cos(0.1 * clock.getElapsedTime());
+                DoughLand.Main.camera.position.z = 248 * Math.sin(0.1 * clock.getElapsedTime());
+                DoughLand.Main.camera.lookAt(zero);
                 DoughLand.Main.renderer.render(DoughLand.Main.scene, DoughLand.Main.camera);
                 window.requestAnimationFrame(gameloop);
             })();

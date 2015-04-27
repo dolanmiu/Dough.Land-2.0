@@ -174,14 +174,15 @@ module DoughLand {
         public static run(target:Element): void {
             this.main();
             target.appendChild(this.renderer.domElement);
-
+            var zero = new THREE.Vector3(0, 0, 0);
+            var clock = new THREE.Clock();
             (function gameloop() {
                 DoughLand.Main.renderer.render(DoughLand.Main.scene, DoughLand.Main.camera);
 
-                /*this.camera.position.x = 0 + 66 * Math.cos(constant * elapsedTime);
-                this.camera.position.z = 0 + 66 * Math.sin(constant * elapsedTime);
-                this.camera.lookAt(target.position);
-                this.renderer.render(this.scene, camera);*/
+                DoughLand.Main.camera.position.x = 248 * Math.cos(0.1 * clock.getElapsedTime());
+                DoughLand.Main.camera.position.z = 248 * Math.sin(0.1 * clock.getElapsedTime());
+                DoughLand.Main.camera.lookAt(zero);
+                DoughLand.Main.renderer.render(DoughLand.Main.scene, DoughLand.Main.camera);
 
                 window.requestAnimationFrame(gameloop);
             })();
