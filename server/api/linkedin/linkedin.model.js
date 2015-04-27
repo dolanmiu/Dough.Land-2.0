@@ -109,7 +109,9 @@ var LinkedinSchema = new Schema({
     skills: {
         values: [{
             id: Number,
-            skill: String
+            skill: {
+                name: String
+            }
         }]
     },
     volenteer: {
