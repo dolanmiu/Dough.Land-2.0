@@ -1,20 +1,22 @@
-<div sticky class="navbar navbar-default" style="z-index:100" ng-controller="NavbarCtrl">
-  <div class="container">
-    <div class="navbar-header">
-      <button class="navbar-toggle" type="button" ng-click="isCollapsed = !isCollapsed">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a href="/" class="navbar-brand">doughland</a>
+<div class="nav-container">
+    <div sticky class="navbar navbar-default navbar-dark" ng-controller="NavbarCtrl">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" type="button" ng-click="isCollapsed = !isCollapsed">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">doughland</a>
+            </div>
+            <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
+                <ul class="nav navbar-nav">
+                    <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
+                        <a ng-href="{{item.link}}">{{item.title}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
-      <ul class="nav navbar-nav">
-        <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
-            <a ng-href="{{item.link}}">{{item.title}}</a>
-        </li>
-      </ul>
-    </div>
-  </div>
 </div>
