@@ -49,7 +49,9 @@
         <h2>Pull from LinkedIn:</h2>
         <textarea id="currentProfileBox" rows="10" style="width:100%"></textarea>
         <button class="btn btn-primary btn-lg" ng-click="addProfile()">Add Profile</button>
-        <a ng-href="/api/cv"><button class="btn btn-primary btn-lg">Create CV</button></a>
+        <a ng-href="/api/cv">
+            <button class="btn btn-primary btn-lg">Create CV</button>
+        </a>
 
         <h2>Stored Profiles:</h2>
         <div ng-repeat="profile in profiles">
@@ -103,6 +105,7 @@
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/angular-socket-io/socket.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/ngSticky/lib/sticky.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
