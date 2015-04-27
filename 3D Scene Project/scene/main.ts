@@ -171,6 +171,22 @@ module DoughLand {
             this.camera.updateProjectionMatrix();
         }
 
+        public static run(target:Element): void {
+            this.main();
+            target.appendChild(this.renderer.domElement);
+
+            (function gameloop() {
+                DoughLand.Main.renderer.render(DoughLand.Main.scene, DoughLand.Main.camera);
+
+                /*this.camera.position.x = 0 + 66 * Math.cos(constant * elapsedTime);
+                this.camera.position.z = 0 + 66 * Math.sin(constant * elapsedTime);
+                this.camera.lookAt(target.position);
+                this.renderer.render(this.scene, camera);*/
+
+                window.requestAnimationFrame(gameloop);
+            })();
+        }
+
         public static main(): void {
             var loader = new THREE.JSONLoader();
 
@@ -188,7 +204,7 @@ module DoughLand {
 
             //$("#main").html(this.renderer.domElement);
             //document.body.appendChild(this.renderer.domElement);
-            document.getElementById("main").appendChild(this.renderer.domElement);
+            //document.getElementById("main").appendChild(this.renderer.domElement);
 
             this.setupCamera();
 

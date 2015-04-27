@@ -49,11 +49,6 @@ angular.module('doughlandApp').controller('MainCtrl', function ($rootScope, $sco
         $scope.gitHubTime = getlastUpdateTime(gitHub.thisversionrun);
     });
 
-    DoughLand.Main.main();
+    DoughLand.Main.run(document.getElementById("main"));
     DoughLand.Main.setSize($window.innerWidth, $window.innerHeight - 70);
-    (function gameloop() {
-
-        DoughLand.Main.renderer.render(DoughLand.Main.scene, DoughLand.Main.camera);
-        window.requestAnimationFrame(gameloop);
-    })();
 });

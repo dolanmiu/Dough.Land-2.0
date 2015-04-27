@@ -364,6 +364,14 @@ var DoughLand;
             this.camera.aspect = width / height;
             this.camera.updateProjectionMatrix();
         };
+        Main.run = function (target) {
+            this.main();
+            target.appendChild(this.renderer.domElement);
+            (function gameloop() {
+                DoughLand.Main.renderer.render(DoughLand.Main.scene, DoughLand.Main.camera);
+                window.requestAnimationFrame(gameloop);
+            })();
+        };
         Main.main = function () {
             var loader = new THREE.JSONLoader();
             this.scene = new THREE.Scene();
@@ -373,7 +381,6 @@ var DoughLand;
             this.renderer.shadowMapEnabled = true;
             this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
             this.renderer.setClearColor(0xFFFFFF, 1);
-            document.getElementById("main").appendChild(this.renderer.domElement);
             this.setupCamera();
             var meshCreator = new DoughLand.MeshCreator(loader);
             Main.createFloor(this.scene, meshCreator);
