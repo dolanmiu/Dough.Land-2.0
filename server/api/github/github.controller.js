@@ -12,7 +12,7 @@ exports.index = function(req, res) {
       res.setHeader('Content-Type', 'application/json');
       return res.json(200, JSON.parse(body));
     } else {
-        return res.send(500, "Couldn't get from kimono labs");   
+        return res.send(response.statusCode, body);   
     }
   })
 };
