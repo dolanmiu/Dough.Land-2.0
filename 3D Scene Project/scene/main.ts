@@ -165,13 +165,13 @@ module DoughLand {
             this.scene.add(this.camera);
         }
 
-        public static setSize(width:number, height:number): void {
+        public static setSize(width: number, height: number): void {
             this.renderer.setSize(width, height);
             this.camera.aspect = width / height;
             this.camera.updateProjectionMatrix();
         }
 
-        public static run(target:Element): void {
+        public static run(target: Element): void {
             this.main();
             target.appendChild(this.renderer.domElement);
             var zero = new THREE.Vector3(0, 0, 0);
@@ -186,6 +186,14 @@ module DoughLand {
 
                 window.requestAnimationFrame(gameloop);
             })();
+        }
+
+        public static setTiltLimits(lower: number, upper: number) {
+
+        }
+
+        public static tilt(amount: number) {
+            this.camera.position.y = amount;
         }
 
         public static main(): void {

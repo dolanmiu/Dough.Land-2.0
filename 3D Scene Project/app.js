@@ -378,6 +378,11 @@ var DoughLand;
                 window.requestAnimationFrame(gameloop);
             })();
         };
+        Main.setTiltLimits = function (lower, upper) {
+        };
+        Main.tilt = function (amount) {
+            this.camera.position.y = amount;
+        };
         Main.main = function () {
             var loader = new THREE.JSONLoader();
             this.scene = new THREE.Scene();
