@@ -1,9 +1,4 @@
-@mixin border-radius($radius) {
-    -webkit-border-radius: $radius;
-    -moz-border-radius: $radius;
-    -ms-border-radius: $radius;
-    border-radius: $radius;
-}
+
 
 .thing-form {
     margin: 20px 0;
@@ -37,13 +32,38 @@
 }
 
 body {
-    overflow-x: hidden;
+    //overflow-x: hidden;
 }
 
 .nav-container {
     height: 100px;
 }
 
-.profile-picture {
-    @include border-radius(40px);
+
+#screen-padding {
+    height: 100vh;
+    z-index: -100;
+}
+
+#main {
+    position: fixed;
+    #title-overlay {
+        width: auto;
+        height: 200px;
+        overflow: auto;
+        margin: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        text-align: center;
+        font-size: 50px;
+    }
+}
+
+.page {
+    background: white;
+    position: relative;
+    z-index: 0;
 }

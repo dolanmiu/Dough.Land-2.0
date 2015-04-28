@@ -7,7 +7,8 @@ angular.module('doughlandApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
-  'sticky'
+  'sticky',
+  'n3-pie-chart'
 ]);
 
 angular.module('doughlandApp').config(function ($stateProvider, $urlRouterProvider, $locationProvider) {

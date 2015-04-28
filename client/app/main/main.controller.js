@@ -49,6 +49,13 @@ angular.module('doughlandApp').controller('MainCtrl', function ($rootScope, $sco
         $scope.gitHubTime = getlastUpdateTime(gitHub.thisversionrun);
     });
 
-    DoughLand.Main.run(document.getElementById("main"));
-    DoughLand.Main.setSize($window.innerWidth, $window.innerHeight - 70);
+    DoughLand.Main.run(document.getElementById('main'));
+    DoughLand.Main.setSize($('body').innerWidth(), $window.innerHeight);
+
+    $window.addEventListener("scroll", function (event) {
+        var top = this.scrollY,
+            left = this.scrollX;
+        console.log(top);
+        DoughLand.Main.tilt(top);
+    }, false);
 });

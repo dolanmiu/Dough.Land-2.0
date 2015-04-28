@@ -1,0 +1,18 @@
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+}
+
+.profile-picture {
+    //-webkit-box-shadow: inset 0px 0px 100px rgba(0, 0, 20, 1);
+    background: -webkit-linear-gradient(top, rgba(255, 145, 0, 0.2) 0%, rgba(255, 230, 48, 0.2) 60%), -webkit-linear-gradient(20deg, rgba(255, 0, 0, 0.5) 0%, rgba(255, 0, 0, 0) 60%);
+    display: table;
+    img {
+        //@include border-radius(40px);
+        -webkit-filter: sepia(20%) brightness(140%) contrast(60%);
+        position: relative;
+        z-index: -1;
+    }
+}
