@@ -30,7 +30,7 @@
 
 .mouse-icon {
     position: relative;
-    border: 2px solid #fff;
+    border: 2px solid;
     border-radius: 16px;
     height: 50px;
     width: 30px;
@@ -40,7 +40,7 @@
     .wheel {
         position: relative;
         border-radius: 10px;
-        background: #fff;
+        background: #545454;
         width: 4px;
         height: 10px;
         top: 4px;
