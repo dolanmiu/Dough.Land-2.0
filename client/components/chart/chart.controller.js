@@ -4,21 +4,26 @@ angular.module('doughlandApp').controller('ChartController', function ($scope) {
 
     $scope.data = [
         {
-            label: "one",
-            value: 12.2,
-            color: "red"
+            label: "CPU",
+            value: 75,
+            suffix: "%",
+            color: "steelblue"
         },
         {
-            label: "two",
-            value: 45,
-            color: "#00ff00"
-        },
-        {
-            label: "three",
-            value: 10,
-            color: "rgb(0, 0, 255)"
+            label: "CPwU",
+            value: 25,
+            suffix: "%",
+            color: "steelblue"
         }
 ];
-    
-    $scope.options = {thickness: 10};
+
+    $scope.options = {
+        thickness: 5,
+        mode: "gauge",
+        total: 100
+    };
+
+    $scope.doSomething = function (skill, selected) {
+        console.log(selected);
+    }
 });

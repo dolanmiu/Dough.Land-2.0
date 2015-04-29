@@ -17,9 +17,6 @@ angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $locat
     }, {
         'title': 'Portfolio',
         'link': ''
-    }, {
-        'title': 'Leave a message',
-        'link': ''
     }];
 
     $scope.isCollapsed = true;

@@ -3,9 +3,10 @@
     <div id="main"></div>
 </div>
 
-<div class="screen-padding" style="height:{{ screenMinusNavHeight }}px">
+<div class="screen-padding" ng-controller="TextEasterEggController" ng-click="getRandomMessage()" style="height:{{ screenMinusNavHeight }}px">
     <div class="title-overlay">
         My name is Dolan
+        <p>{{ currentMessage }}</p>
         <div class="mouse-icon">
             <div class="wheel"></div>
         </div>
@@ -96,7 +97,8 @@
             </div>
             <div ng-hide="gitHub">
                 <div class="text-center">
-                    <i class="fa fa-cog fa-spin fa-3x"></i><h3>Fetching data from GitHub</h3>
+                    <i class="fa fa-cog fa-spin fa-3x"></i>
+                    <h3>Fetching data from GitHub</h3>
                 </div>
             </div>
         </div>
@@ -150,18 +152,21 @@
     </section>
 
     <section class="dark">
-        <div class="container">
+        <div class="container" ng-controller="ChartController">
             <div class="row">
                 <div class="col-lg-12">
                     <h1>Skills</h1>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12">
-                    <div ng-controller="ChartController">
-                        <pie-chart data="data" options="options"></pie-chart>
+                <div class="col-lg-6">
+                    <div class="btn-group btn-spacing" ng-repeat="skill in profile.skills.values">
+                        <label class="btn btn-default btn-anti">3</label>
+                        <label class="btn btn-default" ng-model="skill.selected" ng-click="doSomething(skill, skill.selected)" btn-checkbox>{{ skill.skill.name }}</label>
                     </div>
-                    {{ profile.skills.values }}
+                </div>
+                <div class="col-lg-6" style="height: 500px">
+                    <pie-chart data="data" options="options"></pie-chart>
                 </div>
             </div>
         </div>

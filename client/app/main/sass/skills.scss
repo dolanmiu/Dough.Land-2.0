@@ -1,0 +1,13 @@
+.btn-anti {
+    &:hover {
+        background-color: #fff;
+        border-color: #ccc;
+        /* here copy default .btn class styles */
+        cursor: default !important;
+        /* or something like that */
+    }
+}
+
+.btn-spacing {
+    margin: 5px;   
+}

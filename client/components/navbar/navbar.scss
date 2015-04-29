@@ -1,4 +1,16 @@
 .navbar-dark {
     z-index: 40;
     background: #2a2d3c;
+    .dolan-nav {
+        a {
+            &:hover {
+               color: #2a2d3c;    
+            }
+            color: #eeeeee;
+        }
+        text-transform: lowercase;
+        .nav-button {
+            padding: 0 15px;
+        }
+    }
 }

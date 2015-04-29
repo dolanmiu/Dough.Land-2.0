@@ -1,3 +1,17 @@
 footer {
     background: #20222e;
+    color: #eeeeee;
+    .social-icons {
+        i {
+            margin: 10px;
+        }
+    }
+    p {
+        color: #656b7b;
+        line-height: 10px;
+        font-size: 14px
+    }
+    a {
+       color: #eeeeee;
+    }
 }
