@@ -1,15 +1,30 @@
-'use strict';
+/* globals angular */
+angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $location) {
+    'use strict';
 
-angular.module('doughlandApp')
-  .controller('NavbarCtrl', function ($scope, $location) {
     $scope.menu = [{
-      'title': 'Home',
-      'link': '/'
+        'title': 'Profile',
+        'link': '/'
+    }, {
+        'title': 'Stats',
+        'link': ''
+    }, {
+        'title': 'Resume',
+        'link': ''
+    }, {
+        'title': 'Skills',
+        'link': ''
+    }, {
+        'title': 'Portfolio',
+        'link': ''
+    }, {
+        'title': 'Leave a message',
+        'link': ''
     }];
 
     $scope.isCollapsed = true;
 
-    $scope.isActive = function(route) {
-      return route === $location.path();
+    $scope.isActive = function (route) {
+        return route === $location.path();
     };
-  });
+});

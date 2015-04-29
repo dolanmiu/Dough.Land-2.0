@@ -11,4 +11,8 @@ angular.module('doughlandApp').controller('3dSceneController', function ($scope,
         console.log(top);
         DoughLand.Main.tilt(top);
     }, false);
+
+    $window.addEventListener("resize", function (event) {
+        DoughLand.Main.setSize($('body').innerWidth(), $window.innerHeight);
+    }, false);
 });
