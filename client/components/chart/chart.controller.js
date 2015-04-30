@@ -4,14 +4,8 @@ angular.module('doughlandApp').controller('ChartController', function ($scope) {
 
     $scope.data = [
         {
-            label: "CPU",
+            label: "NA",
             value: 75,
-            suffix: "%",
-            color: "steelblue"
-        },
-        {
-            label: "CPwU",
-            value: 25,
             suffix: "%",
             color: "steelblue"
         }
