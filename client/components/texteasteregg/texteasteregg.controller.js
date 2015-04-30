@@ -24,7 +24,7 @@ angular.module('doughlandApp').controller('TextEasterEggController', function ($
                    'I released software on NPM',
                    'Bulding PCs is a nice past-time',
                    'Gaming is a nice past-time',
-                   'Secret confession: I don't think Justin Bieber is THAT bad (well not a secret anymore)',
+                   'Secret confession: I don\'t think Justin Bieber is THAT bad (well not a secret anymore)',
                    'I love game soundtracks. Zelda ♥',
                    'This website was purely made purely because I am too lazy to update my LinkedIn and CV simutaneously',
                    'I watch LinusTechTips',
