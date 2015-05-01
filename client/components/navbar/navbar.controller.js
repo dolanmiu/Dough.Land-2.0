@@ -4,19 +4,19 @@ angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $locat
 
     $scope.menu = [{
         'title': 'Profile',
-        'link': '/'
+        'link': 'profile'
     }, {
         'title': 'Stats',
-        'link': ''
+        'link': 'stats'
     }, {
         'title': 'Resume',
-        'link': ''
+        'link': 'resume'
     }, {
         'title': 'Skills',
-        'link': ''
+        'link': 'skills'
     }, {
         'title': 'Portfolio',
-        'link': ''
+        'link': 'portfolio'
     }];
 
     $scope.isCollapsed = true;

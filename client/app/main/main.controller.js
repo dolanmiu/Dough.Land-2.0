@@ -1,4 +1,4 @@
-/*globals angular, DoughLand */
+/*globals angular */
 angular.module('doughlandApp').controller('MainCtrl', function ($scope, $window, GitHub) {
     'use strict';
 
@@ -27,7 +27,7 @@ angular.module('doughlandApp').controller('MainCtrl', function ($scope, $window,
 
     $scope.screenMinusNavHeight = $window.innerHeight - 50;
 
-    $window.addEventListener("resize", function (event) {
+    $window.addEventListener('resize', function () {
         $scope.screenMinusNavHeight = $window.innerHeight - 50;
     }, false);
 

@@ -8,7 +8,8 @@ angular.module('doughlandApp', [
   'ui.router',
   'ui.bootstrap',
   'sticky',
-  'n3-pie-chart'
+  'n3-pie-chart',
+  'duScroll'
 ]);
 
 angular.module('doughlandApp').config(function ($stateProvider, $urlRouterProvider, $locationProvider) {

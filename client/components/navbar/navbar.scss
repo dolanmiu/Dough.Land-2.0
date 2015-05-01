@@ -1,16 +1,42 @@
+$bgDefault: #2a2d3c;
+$bgHighlight: #eeeeee;
+$colDefault: #ecf0f1;
+$colHover: #2a2d3c;
+$colNormal: #eeeeee;
 .navbar-dark {
     z-index: 40;
     background: #2a2d3c;
     .dolan-nav {
         a {
             &:hover {
-               color: #2a2d3c;    
+                color: $bgDefault;
             }
-            color: #eeeeee;
+            color: $colNormal;
         }
         text-transform: lowercase;
         .nav-button {
             padding: 0 15px;
+        }
+        .active {
+            > a, > a:hover, > a:focus {
+                color: $colHover;
+                background-color: $bgHighlight;
+            }
+        }
+        .open {
+            > a, > a:hover, > a:focus {
+                color: $colHover;
+                background-color: $bgHighlight;
+                .caret {
+                    border-top-color: $colHover;
+                    border-bottom-color: $colHover;
+                }
+            }
+        }
+        > li {
+            &:hover, &:focus {
+                background-color: $bgDefault;
+            }
         }
     }
 }

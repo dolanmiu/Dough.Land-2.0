@@ -1,4 +1,4 @@
-<div ng-controller="3dSceneController">
+<div id="top" ng-controller="3dSceneController">
 
     <div id="main"></div>
 </div>
@@ -34,7 +34,7 @@
     </div>
     <hr>
 
-    <section>
+    <section id="profile">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -58,7 +58,7 @@
         </div>
     </section>
 
-    <section class="dark">
+    <section id="stats" class="dark">
         <div class="container">
             <div ng-show="gitHub">
                 <div class="row text-right">
@@ -104,7 +104,7 @@
         </div>
     </section>
 
-    <section>
+    <section id="resume">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -151,7 +151,7 @@
         </div>
     </section>
 
-    <section class="dark">
+    <section id="skills" class="dark">
         <div class="container" ng-controller="ChartController">
             <div class="row">
                 <div class="col-lg-12">
@@ -166,6 +166,10 @@
                     </div>
                 </div>
                 <div class="col-lg-6" style="height: 500px">
+                    <div class="text-center vcenter" ng-show="data.length == 0">
+                        <i class="fa fa-pie-chart fa-5x"></i>
+                        <h4>Please select some items from the left hand side to graphically compare my skill to get a general idea of my level of ability</h4>
+                    </div>
                     <pie-chart data="data" options="options"></pie-chart>
                 </div>
             </div>

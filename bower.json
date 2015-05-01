@@ -20,7 +20,8 @@
     "threejs": "r71",
     "ngSticky": "~1.7.9",
     "pie-chart": "~1.0.0",
-    "d3": "~3.5.5"
+    "d3": "~3.5.5",
+    "angular-scroll": "~0.7.0"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
