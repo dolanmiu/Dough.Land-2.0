@@ -1,19 +1,32 @@
+$screen-lg-min: 1200px;
+$screen-md-min: 992px;
+$screen-sm-min: 768px;
 .btn-anti {
     &:hover {
         background-color: #fff;
         border-color: #ccc;
         /* here copy default .btn class styles */
+        
         cursor: default !important;
         /* or something like that */
     }
 }
 
 .btn-spacing {
-    margin: 5px;   
+    margin: 5px;
+    @media screen and (max-width: $screen-lg-min) {
+        margin: 3px;
+    }
 }
 
 .vcenter {
     display: inline-block;
     vertical-align: middle;
     float: none;
+}
+
+#skills {
+    @media screen and (max-width: $screen-sm-min) {
+        display: none;
+    }
 }

@@ -18,16 +18,16 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-4">
-                <i class="fa fa-envelope-o fa-2x"></i>
+            <div class="col-sm-4 col-xs-12">
+                <i class="fa fa-envelope-o fa-3x"></i>
                 <br><a href="mailto:dolan_miu@hotmail.com" target="_top">{{ profile.emailAddress }}</a>
             </div>
-            <div class="col-lg-4">
-                <i class="fa fa-phone fa-2x"></i>
+            <div class="col-sm-4 col-xs-12">
+                <i class="fa fa-phone fa-3x"></i>
                 <br>{{ profile.phoneNumbers.values[0].phoneNumber }}
             </div>
-            <div class="col-lg-4">
-                <i class="fa fa-linkedin-square fa-2x"></i>
+            <div class="col-sm-4 col-xs-12">
+                <i class="fa fa-linkedin-square fa-3x"></i>
                 <br><a ng-href="{{ profile.publicProfileUrl }}" target="_blank">{{ profile.publicProfileUrl }}</a>
             </div>
         </div>
@@ -62,27 +62,27 @@
         <div class="container">
             <div ng-show="gitHub">
                 <div class="row text-right">
-                    <div class="col-lg-3 text-left">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 text-left">
                         <h3>My Stats</h3>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
                         <h2><i class="fa fa-code"></i> {{ gitHub.data.contributionsLastYear.amount * 30 }}</h2>
                         <br>
                         <h3>Lines of code</h3>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
                         <h2><i class="fa fa-code-fork"></i> {{ gitHub.data.contributionsLastYear.amount }}</h2>
                         <br>
                         <h3>Commits</h3>
                         <!--<br>{{ gitHub.data.contributionsLastYear.startDate }} - {{ gitHub.data.contributionsLastYear.endDate }}-->
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
                         <h2><i class="fa fa-child"></i> {{ gitHub.data.longestStreak.amount }}</h2>
                         <br>
                         <h3>Longest Streak</h3>
                         <!--<br>{{ gitHub.data.longestStreak.startDate }} - {{ gitHub.data.longestStreak.endDate }}-->
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
                         <h2><i class="fa fa-trophy"></i> {{ gitHub.data.currentStreak.amount }}</h2>
                         <br>
                         <h3>Current Streak</h3>
@@ -107,35 +107,57 @@
     <section id="resume">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-xs-12">
                     <h1>Resume</h1>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3" style="height:200px">
-                    <h3>Education</h3>
-                </div>
-                <div ng-repeat="education in profile.educations.values">
-                    <div class="col-lg-6">
+                <div ng-repeat-start="education in profile.educations.values" ng-if="$first">
+                    <div class="col-md-3">
+                        <h3>Education</h3>
+                    </div>
+                    <div class="col-md-6">
                         <h4>{{ education.fieldOfStudy }} - {{ education.degree }}</h4>
                         <hr>
                     </div>
-                    <div class="col-lg-3 resume-place">
+                    <div class="col-md-3 resume-place">
+                        <h4><i class="fa fa-graduation-cap"></i>{{ education.schoolName }}</h4>
+                        <i class="fa fa-calendar"></i>{{ education.startDate.year }} - {{ education.endDate.year }}
+                    </div>
+                </div>
+                <div ng-repeat-end ng-if="!$first">
+                    <div class="col-md-6 col-md-offset-3">
+                        <h4>{{ education.fieldOfStudy }} - {{ education.degree }}</h4>
+                        <hr>
+                    </div>
+                    <div class="col-md-3 resume-place">
                         <h4><i class="fa fa-graduation-cap"></i>{{ education.schoolName }}</h4>
                         <i class="fa fa-calendar"></i>{{ education.startDate.year }} - {{ education.endDate.year }}
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3" style="height:700px">
-                    <h3>Experience</h3>
-                </div>
-                <div ng-repeat="position in profile.positions.values">
-                    <div class="col-lg-6">
+                <div ng-repeat-start="position in profile.positions.values" ng-if="$first">
+                    <div class="col-md-3">
+                        <h3>Experience</h3>
+                    </div>
+                    <div class="col-md-6">
                         <h4>{{ position.title }}</h4> {{ position.summary }}
                         <hr>
                     </div>
-                    <div class="col-lg-3 resume-place">
+                    <div class="col-md-3 resume-place">
+                        <h4><i class="fa fa-suitcase"></i> {{ position.company.name }}</h4>
+                        <i class="fa fa-calendar"></i> {{ position.startDate.month }}/{{ position.startDate.year }} -
+                        <span ng-if="position.isCurrent">Present</span>
+                        <span ng-if="!position.isCurrent">{{ position.endDate.month }}/{{ position.endDate.year }}</span>
+                    </div>
+                </div>
+                <div ng-repeat-end ng-if="!$first">
+                    <div class="col-md-6 col-md-offset-3">
+                        <h4>{{ position.title }}</h4> {{ position.summary }}
+                        <hr>
+                    </div>
+                    <div class="col-md-3 resume-place">
                         <h4><i class="fa fa-suitcase"></i> {{ position.company.name }}</h4>
                         <i class="fa fa-calendar"></i> {{ position.startDate.month }}/{{ position.startDate.year }} -
                         <span ng-if="position.isCurrent">Present</span>
@@ -144,7 +166,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3 col-lg-offset-3">
+                <div class="col-md-3 col-md-offset-3">
                     <button class="btn btn-lg btn-success">Generate CV</button>
                 </div>
             </div>
@@ -154,18 +176,18 @@
     <section id="skills" class="dark">
         <div class="container" ng-controller="ChartController">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-xs-12">
                     <h1>Skills</h1>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-md-6">
                     <div class="btn-group btn-spacing" ng-repeat="skill in profile.skills.values">
                         <label class="btn btn-default btn-anti">3</label>
                         <label class="btn btn-default" ng-model="skill.selected" ng-click="doSomething(skill, skill.selected)" btn-checkbox>{{ skill.skill.name }}</label>
                     </div>
                 </div>
-                <div class="col-lg-6" style="height: 500px">
+                <div class="col-md-6" style="height: 500px">
                     <div class="text-center vcenter" ng-show="data.length == 0">
                         <i class="fa fa-pie-chart fa-5x"></i>
                         <h4>Please select some items from the left hand side to graphically compare my skill to get a general idea of my level of ability</h4>
