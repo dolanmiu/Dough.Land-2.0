@@ -9,7 +9,8 @@ angular.module('doughlandApp', [
   'ui.bootstrap',
   'sticky',
   'n3-pie-chart',
-  'duScroll'
+  'duScroll',
+  'pageslide-directive'
 ]);
 
 angular.module('doughlandApp').config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
