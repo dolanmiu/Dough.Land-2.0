@@ -6,7 +6,7 @@ angular.module('doughlandApp').controller('3dSceneController', function ($scope,
     DoughLand.Main.setSize($('body').innerWidth(), $window.innerHeight);
 
     function tiltCalculator(screenPosY) {
-        var scaledY = screenPosY / 100;
+        var scaledY = screenPosY / 170;
         return 70 * Math.exp(-scaledY) + 0.1;
     }
 

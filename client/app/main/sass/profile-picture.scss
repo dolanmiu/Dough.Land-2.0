@@ -1,3 +1,6 @@
+$screen-lg-min: 1200px;
+$screen-md-min: 992px;
+$screen-sm-min: 768px;
 @mixin border-radius($radius) {
     -webkit-border-radius: $radius;
     -moz-border-radius: $radius;
@@ -14,5 +17,21 @@
         -webkit-filter: sepia(20%) brightness(140%) contrast(60%);
         position: relative;
         z-index: -1;
+        width: 270px;
+        height: 270px;
+        @include border-radius(135px);
+        @media screen and (max-width: $screen-sm-min) {
+            width: 150px;
+            height: 150px;
+            @include border-radius(75px);
+        }
+        @media screen and (max-width: $screen-md-min) {
+            width: 200px;
+            height: 200px;
+            @include border-radius(100px);
+        }
+    }
+    @media screen and (max-width: $screen-sm-min) {
+        margin: 0 auto;
     }
 }

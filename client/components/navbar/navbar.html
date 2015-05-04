@@ -8,7 +8,22 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="#top" class="navbar-brand" du-smooth-scroll>dough.land</a>
+                <a href="#top" class="navbar-brand desktop-nav" du-smooth-scroll>dough.land</a>
+                <ul class="nav mobile-nav">
+                    <li class="navbar-btn nav-button">
+                        <div class="mobile-nav" ng-controller="PageSlideController">
+                            <button class="btn btn-primary" ng-click="toggle()"><i class="fa fa-bars"></i>
+                            </button>
+                            <pageslide ps-open="checked" ps-side="right" ps-push="true" ps-auto-close="true" ps-cloak="false">
+                                <div style="padding:20px" id="demo-right">
+                                    <h2>Hello Pageslide</h2>
+                                    <p>Put here whatever you want</p>
+                                    <a ng-click="toggle()" class="button">Close</a>
+                                </div>
+                            </pageslide>
+                        </div>
+                    </li>
+                </ul>
             </div>
             <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
                 <ul class="nav navbar-nav dolan-nav">
@@ -16,7 +31,8 @@
                         <a href="#{{item.link}}" du-smooth-scroll>{{item.title}}</a>
                     </li>
                     <li class="navbar-btn nav-button">
-                    <button class="btn btn-success">Generate CV <i class="fa fa-file-word-o"></i></button>
+                        <button class="btn btn-success">Generate CV <i class="fa fa-file-word-o"></i>
+                        </button>
                     </li>
                 </ul>
             </div>

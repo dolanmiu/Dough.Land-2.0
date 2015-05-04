@@ -1,3 +1,6 @@
+$screen-lg-min: 1200px;
+$screen-md-min: 992px;
+$screen-sm-min: 768px;
 .thing-form {
     margin: 20px 0;
 }
@@ -29,10 +32,6 @@
     border-top: 1px solid #E5E5E5;
 }
 
-.nav-container {
-    height: 100px;
-}
-
 .page {
     background: white;
     position: relative;
@@ -41,6 +40,9 @@
 
 section {
     padding: 120px 0;
+    @media screen and (max-width: $screen-sm-min) {
+        padding: 50px 0;
+    }
 }
 
 .dark {
@@ -48,5 +50,5 @@ section {
 }
 
 body {
-    overflow-x: hidden;   
+    overflow-x: hidden;
 }
