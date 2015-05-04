@@ -8,7 +8,7 @@ $screen-md-min: 992px;
 $screen-sm-min: 768px;
 .navbar-dark {
     z-index: 40;
-    background: #2a2d3c;
+    background: $bgDefault;
     .dolan-nav {
         a {
             &:hover {

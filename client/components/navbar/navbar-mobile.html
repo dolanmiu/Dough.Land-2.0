@@ -1,0 +1,27 @@
+<ul class="nav mobile-nav">
+    <li class="navbar-btn nav-button">
+        <div class="mobile-nav" ng-controller="PageSlideController">
+            <button class="btn btn-primary" ng-click="toggle()"><i class="fa fa-bars"></i>
+            </button>
+            <pageslide class="navbar-mobile" ps-open="checked" ps-side="right" ps-push="true" ps-auto-close="true" ps-cloak="false">
+                <div>
+                    <div ng-controller="NavbarCtrl">
+                        <ul class="nav dolan-nav">
+                            <li du-smooth-scroll>
+                                <a href="#top" du-smooth-scroll><div class="icon"><i class="fa fa-arrow-up"></i></div>Top</a>
+                                <hr>
+                            </li>
+                            <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}" du-scrollspy="{{ item.link }}">
+                                <a href="#{{ item.link }}" du-smooth-scroll><div class="icon"><i class="fa {{ item.icon }}"></i></div>{{ item.title }}</a>
+                                <hr>
+                            </li>
+                            <li>
+                                <a ng-click="toggle()" class="button"><div class="icon"><i class="fa fa-times"></i></div>Close</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </pageslide>
+        </div>
+    </li>
+</ul>

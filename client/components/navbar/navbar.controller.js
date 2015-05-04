@@ -4,19 +4,24 @@ angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $locat
 
     $scope.menu = [{
         'title': 'Profile',
-        'link': 'profile'
+        'link': 'profile',
+        'icon': 'fa-user'
     }, {
         'title': 'Stats',
-        'link': 'stats'
+        'link': 'stats',
+        'icon': 'fa-line-chart'
     }, {
         'title': 'Resume',
-        'link': 'resume'
+        'link': 'resume',
+        'icon': 'fa-graduation-cap'
     }, {
         'title': 'Skills',
-        'link': 'skills'
+        'link': 'skills',
+        'icon': 'fa-star'
     }, {
         'title': 'Portfolio',
-        'link': 'portfolio'
+        'link': 'portfolio',
+        'icon': 'fa-picture-o'
     }];
 
     $scope.isCollapsed = true;
