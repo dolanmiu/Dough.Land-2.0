@@ -23,6 +23,8 @@ angular.module('doughlandApp').controller('MainCtrl', function ($scope, $window,
     GitHub.get({}, function (gitHub) {
         $scope.gitHub = gitHub;
         $scope.gitHubTime = getlastUpdateTime(gitHub.thisversionrun);
+    }, function (error) {
+        $scope.gitHub = error;
     });
 
     $scope.screenMinusNavHeight = $window.innerHeight - 50;
