@@ -37,3 +37,14 @@ angular.module('doughlandApp').factory('LinkedIn', function ($resource) {
 angular.module('doughlandApp').factory('GitHub', function ($resource) {
     return $resource('/api/github/');
 });
+
+angular.module('doughlandApp').factory('Cv', function ($resource) {
+    return $resource('/cv/:controller', {}, {
+        download: {
+            method: 'GET',
+            params: {
+                controller: 'download'
+            }
+        }
+    });
+});

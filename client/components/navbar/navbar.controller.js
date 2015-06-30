@@ -1,5 +1,5 @@
 /* globals angular */
-angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $location) {
+angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $location, Cv) {
     'use strict';
 
     $scope.menu = [{
@@ -29,4 +29,8 @@ angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $locat
     $scope.isActive = function (route) {
         return route === $location.path();
     };
+    
+    $scope.downloadCv = function () {
+        Cv.download();
+    }
 });
