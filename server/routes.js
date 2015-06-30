@@ -14,6 +14,8 @@ module.exports = function (app) {
     app.use('/api/linkedin', require('./api/linkedin'));
     app.use('/api/things', require('./api/thing'));
 
+    app.use('/cv', require('./cv'));
+    
     // All undefined asset or api routes should return a 404
     app.route('/:url(api|auth|components|app|bower_components|assets)/*').get(errors[404]);
 
