@@ -1,5 +1,5 @@
 /* globals angular */
-angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $location, Cv) {
+angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $location, $window) {
     'use strict';
 
     $scope.menu = [{
@@ -31,6 +31,7 @@ angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $locat
     };
     
     $scope.downloadCv = function () {
-        Cv.download();
+        $window.open('cv/download', '_blank');
+        //Cv.download();
     }
 });
