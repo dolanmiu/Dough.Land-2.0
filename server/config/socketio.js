@@ -19,7 +19,6 @@ function onConnect(socket) {
 
   // Insert sockets below
   require('../api/github/github.socket').register(socket);
-  require('../api/cv/cv.socket').register(socket);
   require('../api/linkedin/linkedin.socket').register(socket);
   require('../api/thing/thing.socket').register(socket);
 }

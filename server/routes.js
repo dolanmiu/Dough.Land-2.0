@@ -10,7 +10,6 @@ module.exports = function (app) {
 
     // Insert routes below
     app.use('/api/github', require('./api/github'));
-    app.use('/api/cv', require('./api/cv'));
     app.use('/api/linkedin', require('./api/linkedin'));
     app.use('/api/things', require('./api/thing'));
 
