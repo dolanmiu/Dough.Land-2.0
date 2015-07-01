@@ -29,7 +29,7 @@ angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $locat
     $scope.isActive = function (route) {
         return route === $location.path();
     };
-    
+
     $scope.downloadCv = function () {
         $window.open('cv/download', '_blank');
         //Cv.download();
