@@ -17,14 +17,14 @@ function createContactInfoParagraph() {
     return contactInfoParagraph;
 }
 
-function createEducationHeading() {
+function createHeading() {
     'use strict';
 
     var educationHeadingParagraph = docx.createParagraph("Education").heading2().thematicBreak();
     return educationHeadingParagraph;
 }
 
-function createEducation() {
+function createInstitution() {
     'use strict';
 
     var paragraph = docx.createParagraph().enableRightText(),
@@ -33,6 +33,14 @@ function createEducation() {
 
     paragraph.addText(institution);
     paragraph.addText(date);
+
+    return paragraph;
+}
+
+function createBullet() {
+    'use strict';
+
+    var paragraph = docx.createParagraph("Stuff happens here").bullet();
 
     return paragraph;
 }
@@ -46,8 +54,10 @@ exports.download = function (req, res, next) {
     dolanMiuTitle.addText(docx.createText('Dolan Miu'));
     doc.addParagraph(dolanMiuTitle);
     doc.addParagraph(createContactInfoParagraph());
-    doc.addParagraph(createEducationHeading());
-    doc.addParagraph(createEducation());
+    doc.addParagraph(createHeading());
+    doc.addParagraph(createInstitution());
+    doc.addParagraph(createBullet());
+    doc.addParagraph(createBullet());
 
     exporter.archive(res, doc, 'Dolan Miu\'s CV');
     //res.send(200, doc);
