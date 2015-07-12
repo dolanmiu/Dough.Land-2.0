@@ -4,11 +4,20 @@ var officeClippy = require('office-clippy');
 var docx = officeClippy.docx;
 var exporter = officeClippy.exporter;
 
-function createContactInfoParagraph() {
+function createTitle(titleText) {
+    'use strict';
+    
+    var title = docx.createParagraph().title();
+    title.addText(docx.createText(titleText));
+    
+    return title;
+}
+
+function createContactInfoParagraph(phoneNumber, profileUrl, email) {
     'use strict';
 
     var contactInfoParagraph = docx.createParagraph().center(),
-        contactInfo = docx.createText('Mobile: +44 (0) 7595672701 | LinkedIn: uk.linkedin.com/in/dolan1 | Email: dolan_miu@hotmail.com'),
+        contactInfo = docx.createText('Mobile: ' + phoneNumber + ' | LinkedIn: ' + profileUrl + ' | Email: ' + email),
         address = docx.createText('Address: 58 Elm Avenue, Kent ME4 6ER, UK').break();
 
     contactInfoParagraph.addText(contactInfo);
@@ -17,19 +26,19 @@ function createContactInfoParagraph() {
     return contactInfoParagraph;
 }
 
-function createHeading() {
+function createSection(sectionText) {
     'use strict';
 
-    var educationHeadingParagraph = docx.createParagraph("Education").heading2().thematicBreak();
+    var educationHeadingParagraph = docx.createParagraph(sectionText).heading2().thematicBreak();
     return educationHeadingParagraph;
 }
 
-function createInstitution() {
+function createInstitutionHeader(institutionName, dateText) {
     'use strict';
 
     var paragraph = docx.createParagraph().enableRightText(),
-        institution = docx.createText("University College London"),
-        date = docx.createText("Date").rightText();
+        institution = docx.createText(institutionName),
+        date = docx.createText(dateText).rightText();
 
     paragraph.addText(institution);
     paragraph.addText(date);
@@ -45,20 +54,34 @@ function createBullet() {
     return paragraph;
 }
 
+function createDocument(profile) {
+    'use strict';
+    var doc = docx.create();
+
+    doc.addParagraph(createTitle(profile.formattedName));
+    doc.addParagraph(createContactInfoParagraph(profile.phoneNumbers.values[0].phoneNumber, profile.publicProfileUrl, profile.emailAddress));
+    doc.addParagraph(createSection("Education"));
+    doc.addParagraph(createInstitutionHeader("UCL", "Date"));
+    doc.addParagraph(createBullet());
+    doc.addParagraph(createBullet());
+
+    return doc;
+}
+
 exports.download = function (req, res, next) {
     'use strict';
 
-    var doc = docx.create();
+    Linkedin.findOne({
+        'default': true
+    }, {}, function (err, linkedIn) {
+        if (err) {
+            return res.send(500, err);
+        }
+        if (!linkedIn) {
+            return res.send(500, 'No Default CV Present');
+        }
 
-    var dolanMiuTitle = docx.createParagraph().heading1();
-    dolanMiuTitle.addText(docx.createText('Dolan Miu'));
-    doc.addParagraph(dolanMiuTitle);
-    doc.addParagraph(createContactInfoParagraph());
-    doc.addParagraph(createHeading());
-    doc.addParagraph(createInstitution());
-    doc.addParagraph(createBullet());
-    doc.addParagraph(createBullet());
-
-    exporter.archive(res, doc, 'Dolan Miu\'s CV');
-    //res.send(200, doc);
+        var doc = createDocument(linkedIn);
+        exporter.archive(res, doc, 'Dolan Miu\'s CV');
+    });
 };
