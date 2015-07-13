@@ -1,8 +1,10 @@
 /*global exports, require */
-var Linkedin = require('../../api/linkedin/linkedin.model');
 var officeClippy = require('office-clippy');
 var docx = officeClippy.docx;
 var exporter = officeClippy.exporter;
+
+var Linkedin = require('../../api/linkedin/linkedin.model');
+var utility = require('./utility');
 
 function createTitle(titleText) {
     'use strict';
@@ -57,21 +59,12 @@ function createRoleText(roleText) {
     return paragraph;
 }
 
-function createBullet() {
+function createBullet(text) {
     'use strict';
 
-    var paragraph = docx.createParagraph("Stuff happens here").bullet();
+    var paragraph = docx.createParagraph(text).bullet();
 
     return paragraph;
-}
-
-function createPositionDateText(startDate, endDate) {
-    'use strict';
-
-    if (!endDate) {
-        endDate = 'Present';
-    }
-    return startDate + ' - ' + endDate;
 }
 
 function createDocument(profile) {
@@ -92,8 +85,17 @@ function createDocument(profile) {
     doc.addParagraph(createSection('Experience'));
 
     profile.positions.values.forEach(function (position) {
-        doc.addParagraph(createInstitutionHeader(position.company.name, createPositionDateText(position.startDate, position.endDate)));
+        doc.addParagraph(createInstitutionHeader(position.company.name, utility.createPositionDateText(position.startDate, position.endDate, JSON.parse(position.isCurrent))));
+        doc.addParagraph(createRoleText(position.title));
+
+        var bulletPoints = utility.splitParagraphTextIntoBullets(position.summary);
+
+        bulletPoints.forEach(function (bulletPoint) {
+            doc.addParagraph(createBullet(bulletPoint));
+        });
     });
+
+    doc.addParagraph(createSection('Skills'));
 
     return doc;
 }
