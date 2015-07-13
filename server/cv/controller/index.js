@@ -1,15 +1,15 @@
 /*global exports, require */
-var Linkedin = require('../api/linkedin/linkedin.model');
+var Linkedin = require('../../api/linkedin/linkedin.model');
 var officeClippy = require('office-clippy');
 var docx = officeClippy.docx;
 var exporter = officeClippy.exporter;
 
 function createTitle(titleText) {
     'use strict';
-    
+
     var title = docx.createParagraph().title();
     title.addText(docx.createText(titleText));
-    
+
     return title;
 }
 
@@ -46,6 +46,17 @@ function createInstitutionHeader(institutionName, dateText) {
     return paragraph;
 }
 
+function createRoleText(roleText) {
+    'use strict';
+
+    var paragraph = docx.createParagraph(),
+        role = docx.createText(roleText).italic();
+
+    paragraph.addText(role);
+
+    return paragraph;
+}
+
 function createBullet() {
     'use strict';
 
@@ -54,16 +65,35 @@ function createBullet() {
     return paragraph;
 }
 
+function createPositionDateText(startDate, endDate) {
+    'use strict';
+
+    if (!endDate) {
+        endDate = 'Present';
+    }
+    return startDate + ' - ' + endDate;
+}
+
 function createDocument(profile) {
     'use strict';
     var doc = docx.create();
 
     doc.addParagraph(createTitle(profile.formattedName));
     doc.addParagraph(createContactInfoParagraph(profile.phoneNumbers.values[0].phoneNumber, profile.publicProfileUrl, profile.emailAddress));
-    doc.addParagraph(createSection("Education"));
-    doc.addParagraph(createInstitutionHeader("UCL", "Date"));
-    doc.addParagraph(createBullet());
-    doc.addParagraph(createBullet());
+    doc.addParagraph(createSection('Education'));
+
+    profile.educations.values.forEach(function (education) {
+        doc.addParagraph(createInstitutionHeader(education.schoolName, education.startDate.year + ' - ' + education.endDate.year));
+        doc.addParagraph(createRoleText(education.fieldOfStudy + ' - ' + education.degree));
+        doc.addParagraph(createBullet());
+        doc.addParagraph(createBullet());
+    });
+
+    doc.addParagraph(createSection('Experience'));
+
+    profile.positions.values.forEach(function (position) {
+        doc.addParagraph(createInstitutionHeader(position.company.name, createPositionDateText(position.startDate, position.endDate)));
+    });
 
     return doc;
 }
