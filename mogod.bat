@@ -1,2 +1,2 @@
-cd C:\Program Files\MongoDB 2.6 Standard\bin\
+cd C:\Program Files\MongoDB\Server\3.0\bin
 mongod
