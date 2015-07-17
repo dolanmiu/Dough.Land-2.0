@@ -78,8 +78,11 @@ function createDocument(profile) {
     profile.educations.values.forEach(function (education) {
         doc.addParagraph(createInstitutionHeader(education.schoolName, education.startDate.year + ' - ' + education.endDate.year));
         doc.addParagraph(createRoleText(education.fieldOfStudy + ' - ' + education.degree));
-        doc.addParagraph(createBullet());
-        doc.addParagraph(createBullet());
+
+        var bulletPoints = utility.splitParagraphTextIntoBullets(education.notes);
+        bulletPoints.forEach(function (bulletPoint) {
+            doc.addParagraph(createBullet(bulletPoint));
+        });
     });
 
     doc.addParagraph(createSection('Experience'));
@@ -97,6 +100,18 @@ function createDocument(profile) {
 
     doc.addParagraph(createSection('Skills'));
 
+    doc.addParagraph(createSection('Volunteering'));
+
+    profile.volunteer.volunteerExperiences.values.forEach(function (volenteer) {
+        doc.addParagraph(createInstitutionHeader(volenteer.organization.name));
+        doc.addParagraph(createRoleText(volenteer.role));
+
+        /*var bulletPoints = utility.splitParagraphTextIntoBullets(position.summary);
+
+        bulletPoints.forEach(function (bulletPoint) {
+            doc.addParagraph(createBullet(bulletPoint));
+        });*/
+    });
     return doc;
 }
 
