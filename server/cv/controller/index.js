@@ -39,7 +39,7 @@ function createInstitutionHeader(institutionName, dateText) {
     'use strict';
 
     var paragraph = docx.createParagraph().enableRightText(),
-        institution = docx.createText(institutionName),
+        institution = docx.createText(institutionName).bold(),
         date = docx.createText(dateText).rightText();
 
     paragraph.addText(institution);
