@@ -1,5 +1,4 @@
-'use strict';
-
+/*globals require, module */
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
@@ -33,7 +32,8 @@ var LinkedinSchema = new Schema({
             schoolName: String,
             startDate: {
                 year: Number
-            }
+            },
+            notes: String
         }]
     },
     firstName: String,
@@ -85,7 +85,7 @@ var LinkedinSchema = new Schema({
             },
             endDate: {
                 month: Number,
-                year: Number   
+                year: Number
             },
             summary: String,
             title: String
@@ -114,7 +114,7 @@ var LinkedinSchema = new Schema({
             }
         }]
     },
-    volenteer: {
+    volunteer: {
         causes: {
             values: [{
                 name: String
@@ -130,7 +130,7 @@ var LinkedinSchema = new Schema({
                 name: String
             }]
         },
-        volenteerExperiences: {
+        volunteerExperiences: {
             values: [{
                 id: Number,
                 organization: {
