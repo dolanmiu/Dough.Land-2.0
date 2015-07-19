@@ -31,8 +31,15 @@ function createContactInfoParagraph(phoneNumber, profileUrl, email) {
 function createSection(sectionText) {
     'use strict';
 
-    var educationHeadingParagraph = docx.createParagraph(sectionText).heading2().thematicBreak();
+    var educationHeadingParagraph = docx.createParagraph(sectionText).heading1().thematicBreak();
     return educationHeadingParagraph;
+}
+
+function createSubSection(text) {
+    'use strict';
+
+    var paragraph = docx.createParagraph(text).heading2();
+    return paragraph;
 }
 
 function createInstitutionHeader(institutionName, dateText) {
@@ -40,7 +47,7 @@ function createInstitutionHeader(institutionName, dateText) {
 
     var paragraph = docx.createParagraph().enableRightText(),
         institution = docx.createText(institutionName).bold(),
-        date = docx.createText(dateText).rightText();
+        date = docx.createText(dateText).rightText().bold();
 
     paragraph.addText(institution);
     paragraph.addText(date);
@@ -63,6 +70,48 @@ function createBullet(text) {
     'use strict';
 
     var paragraph = docx.createParagraph(text).bullet();
+
+    return paragraph;
+}
+
+function createSkillList(skills) {
+    'use strict';
+
+    var paragraph = docx.createParagraph(),
+        i,
+        skillConcat = '';
+
+    for (i = 1; i < skills.length; i += 1) {
+        skillConcat += skills[i].skill.name;
+        if (i === skills.length - 1) {
+            skillConcat += '.';
+        } else {
+            skillConcat += ', ';
+        }
+    }
+    paragraph.addText(docx.createText(skillConcat));
+
+    return paragraph;
+}
+
+function createInterests(interests) {
+    'use strict';
+
+    var paragraph = docx.createParagraph();
+
+    paragraph.addText(docx.createText(interests));
+    return paragraph;
+}
+
+function createInstitutionPair(item, description) {
+    'use strict';
+
+    var paragraph = docx.createParagraph(),
+        itemText = docx.createText(item + ' - ').bold(),
+        descriptionText = docx.createText(description).italic();
+
+    paragraph.addText(itemText);
+    paragraph.addText(descriptionText);
 
     return paragraph;
 }
@@ -98,20 +147,30 @@ function createDocument(profile) {
         });
     });
 
-    doc.addParagraph(createSection('Skills'));
+    doc.addParagraph(createSection('Skills, Achievements and Interests'));
 
-    doc.addParagraph(createSection('Volunteering'));
+    doc.addParagraph(createSubSection('Skills'));
+
+    doc.addParagraph(createSkillList(profile.skills.values));
+
+    doc.addParagraph(createSubSection('Achievements'));
+
+    profile.honorsAwards.values.forEach(function (award) {
+        doc.addParagraph(createInstitutionPair(award.issuer, award.name));
+    });
+
+    doc.addParagraph(createSubSection('Volunteering'));
 
     profile.volunteer.volunteerExperiences.values.forEach(function (volenteer) {
-        doc.addParagraph(createInstitutionHeader(volenteer.organization.name));
-        doc.addParagraph(createRoleText(volenteer.role));
-
-        /*var bulletPoints = utility.splitParagraphTextIntoBullets(position.summary);
-
-        bulletPoints.forEach(function (bulletPoint) {
-            doc.addParagraph(createBullet(bulletPoint));
-        });*/
+        doc.addParagraph(createInstitutionPair(volenteer.organization.name, volenteer.role));
     });
+
+    doc.addParagraph(createSubSection('Interests'));
+
+    doc.addParagraph(createInterests(profile.interests));
+
+    doc.addParagraph(createSection('References'));
+
     return doc;
 }
 
