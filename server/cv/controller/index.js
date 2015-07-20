@@ -45,9 +45,9 @@ function createSubSection(text) {
 function createInstitutionHeader(institutionName, dateText) {
     'use strict';
 
-    var paragraph = docx.createParagraph().enableRightText(),
+    var paragraph = docx.createParagraph().addTabStop(docx.createMaxRightTabStop()),
         institution = docx.createText(institutionName).bold(),
-        date = docx.createText(dateText).rightText().bold();
+        date = docx.createText(dateText).tab().bold();
 
     paragraph.addText(institution);
     paragraph.addText(date);
@@ -103,13 +103,18 @@ function createInterests(interests) {
     return paragraph;
 }
 
-function createInstitutionPair(item, description) {
+function createInstitutionPair(item, description, title) {
     'use strict';
 
     var paragraph = docx.createParagraph(),
-        itemText = docx.createText(item + ' - ').bold(),
+        titleText = docx.createText(title).bold(),
+        itemText = docx.createText(item + ' - ').tab(),
         descriptionText = docx.createText(description).italic();
 
+    paragraph.addTabStop(docx.createLeftTabStop(2268));
+    if (title !== undefined) {
+        paragraph.addText(titleText);
+    }
     paragraph.addText(itemText);
     paragraph.addText(descriptionText);
 
@@ -118,7 +123,8 @@ function createInstitutionPair(item, description) {
 
 function createDocument(profile) {
     'use strict';
-    var doc = docx.create();
+    var doc = docx.create(),
+        i;
 
     doc.addParagraph(createTitle(profile.formattedName));
     doc.addParagraph(createContactInfoParagraph(profile.phoneNumbers.values[0].phoneNumber, profile.publicProfileUrl, profile.emailAddress));
@@ -153,17 +159,22 @@ function createDocument(profile) {
 
     doc.addParagraph(createSkillList(profile.skills.values));
 
-    doc.addParagraph(createSubSection('Achievements'));
 
-    profile.honorsAwards.values.forEach(function (award) {
-        doc.addParagraph(createInstitutionPair(award.issuer, award.name));
-    });
+    for (i = 0; i < profile.honorsAwards.values.length; i += 1) {
+        if (i === 0) {
+            doc.addParagraph(createInstitutionPair(profile.honorsAwards.values[i].issuer, profile.honorsAwards.values[i].name, 'Achievements'));
+        } else {
+            doc.addParagraph(createInstitutionPair(profile.honorsAwards.values[i].issuer, profile.honorsAwards.values[i].name));
+        }
+    }
 
-    doc.addParagraph(createSubSection('Volunteering'));
-
-    profile.volunteer.volunteerExperiences.values.forEach(function (volenteer) {
-        doc.addParagraph(createInstitutionPair(volenteer.organization.name, volenteer.role));
-    });
+    for (i = 0; i < profile.volunteer.volunteerExperiences.values.length; i += 1) {
+        if (i === 0) {
+            doc.addParagraph(createInstitutionPair(profile.volunteer.volunteerExperiences.values[i].organization.name, profile.volunteer.volunteerExperiences.values[i].role, 'Volunteering'));
+        } else {
+            doc.addParagraph(createInstitutionPair(profile.volunteer.volunteerExperiences.values[i].organization.name, profile.volunteer.volunteerExperiences.values[i].role));
+        }
+    }
 
     doc.addParagraph(createSubSection('Interests'));
 
