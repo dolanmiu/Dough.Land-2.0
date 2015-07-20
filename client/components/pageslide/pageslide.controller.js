@@ -5,6 +5,6 @@ angular.module('doughlandApp').controller('PageSlideController', function ($scop
     $scope.checked = false;
 
     $scope.toggle = function () {
-        $scope.checked = !$scope.checked
-    }
+        $scope.checked = !$scope.checked;
+    };
 });

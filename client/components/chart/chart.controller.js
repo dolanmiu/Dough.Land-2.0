@@ -1,3 +1,4 @@
+/*jslint nomen: true */
 /*globals angular */
 angular.module('doughlandApp').controller('ChartController', function ($scope) {
     'use strict';
@@ -17,7 +18,7 @@ angular.module('doughlandApp').controller('ChartController', function ($scope) {
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     }
 
-    function generateRandomColor(mix) {
+    function generateRandomColor() {
         var red = getRandomNumber(0, 256),
             green = getRandomNumber(0, 256),
             blue = getRandomNumber(0, 256);
@@ -29,7 +30,7 @@ angular.module('doughlandApp').controller('ChartController', function ($scope) {
         return rgbToHex(red, green, blue);
     }
 
-    $scope.doSomething = function (skill, selected) {
+    $scope.doSomething = function (skill) {
         var i;
         for (i = 0; i < $scope.data.length; i += 1) {
             if ($scope.data[i].id === skill._id) {

@@ -1,4 +1,4 @@
-/* globals angular */
+/*globals angular */
 angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $location, $window) {
     'use strict';
 
@@ -33,5 +33,5 @@ angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $locat
     $scope.downloadCv = function () {
         $window.open('cv/download', '_blank');
         //Cv.download();
-    }
+    };
 });
