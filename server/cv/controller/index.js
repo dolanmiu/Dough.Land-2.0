@@ -199,6 +199,7 @@ exports.download = function (req, res, next) {
         }
 
         var doc = createDocument(linkedIn);
-        exporter.archive(res, doc, 'Dolan Miu\'s CV');
+
+        exporter.express(res, doc, 'Dolan Miu\'s CV');
     });
 };
