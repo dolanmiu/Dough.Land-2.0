@@ -123,7 +123,11 @@ function createInstitutionPair(item, description, title) {
 
 function createDocument(profile) {
     'use strict';
-    var doc = docx.create(),
+    var doc = docx.create({
+            creator: 'Dolan Miu',
+            description: 'A generated version of my CV from data straight from LinkedIn',
+            title: 'Dolan Miu CV'
+        }),
         i;
 
     doc.addParagraph(createTitle(profile.formattedName));
