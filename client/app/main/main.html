@@ -228,17 +228,17 @@
                     <h1>Portfolio</h1>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-4" ng-repeat="item in portfolio">
+            <div deckgrid class="deckgrid" source="portfolio">
+                <div class="col-sm-4 a-card">
                     <div class="thumbnail">
-                        <a href="{{ item.link }}" target="_blank">
-                            <img src="{{ item.imageUrl }}" data-holder-rendered="true" style="height: 200px; width: 100%; display: block;">
+                        <a href="{{ card.link }}" target="_blank">
+                            <img ng-src="{{ card.imageUrl }}" data-holder-rendered="true" style="height: 200px; width: 100%; display: block;">
                         </a>
                         <div class="caption">
-                            <h3>{{ item.title }}</h3>
-                            <p>{{ item.description }}</p>
+                            <h3>{{ card.title }}</h3>
+                            <p>{{ card.description }}</p>
                             <p>
-                                <a href="{{ item.link }}" class="btn btn-primary" role="button" target="_blank">Check it out</a>
+                                <a href="{{ card.link }}" class="btn btn-primary" role="button" target="_blank">Check it out</a>
                             </p>
                         </div>
                     </div>
