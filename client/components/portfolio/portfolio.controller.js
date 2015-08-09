@@ -18,7 +18,7 @@ angular.module('doughlandApp').controller('PortfolioController', function ($scop
         description: 'I was tasked to design the Chinese resrautant, Beijing Inn\'s website. This was a simple one page scroll website based on the LAMP stack. It uses Google maps to show the restaurant location, and Lightbox 2.0 to display photos, which are dynamically populated with PHP. Come visit the restaurant if you fancy.',
         link: 'http://www.beijinginn.co.uk'
     }, {
-        imageUrl: 'assets/images/urg-soundscape-thumbnail.png',
+        imageUrl: 'assets/images/urf-soundscape-thumbnail.png',
         title: 'League of Legends URF Soundscape',
         description: 'A competition I entered in which one has to develop something interesting and unique with the API they provide. I decided on creating a nature or city (or anything in between) soundscape which is powered by the events which happen directly in game. Perfect for studying, or relaxing. Sounds made using Logic Pro, and from freesounds.org. Made using AngularJS. It was originally made for the URF event, now it works universally! Horray!',
         link: 'https://lol-soundscape.herokuapp.com/'
