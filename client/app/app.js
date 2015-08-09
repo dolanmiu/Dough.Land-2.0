@@ -10,7 +10,8 @@ angular.module('doughlandApp', [
   'sticky',
   'n3-pie-chart',
   'duScroll',
-  'pageslide-directive'
+  'pageslide-directive',
+  'akoenig.deckgrid'
 ]);
 
 angular.module('doughlandApp').config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
