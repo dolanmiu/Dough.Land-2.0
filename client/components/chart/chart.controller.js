@@ -10,6 +10,13 @@ angular.module('doughlandApp').controller('ChartController', function ($scope) {
         total: 100
     };
 
+    var skillScores = {
+        'Chickens': 10,
+        'Java': 7,
+        'C#': 7,
+        'Software Development': 8
+    };
+
     function rgbToHex(r, g, b) {
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
     }
@@ -30,6 +37,11 @@ angular.module('doughlandApp').controller('ChartController', function ($scope) {
         return rgbToHex(red, green, blue);
     }
 
+    function getSkillScore(skill) {
+        var skillScore = skillScores[skill];
+        return skillScore == undefined ? 0 : skillScore;
+    }
+
     $scope.doSomething = function (skill) {
         var i;
         for (i = 0; i < $scope.data.length; i += 1) {
@@ -41,9 +53,10 @@ angular.module('doughlandApp').controller('ChartController', function ($scope) {
 
         $scope.data.push({
             label: skill.skill.name,
-            value: 10,
+            value: getSkillScore(skill.skill.name),
             color: generateRandomColor(),
             id: skill._id
         });
+        console.log(skill.skill.name);
     };
 });
