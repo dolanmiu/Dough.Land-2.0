@@ -1,0 +1,14 @@
+<div class="portfolio-card">
+    <div class="thumbnail">
+        <a href="{{ card.link }}" target="_blank">
+            <img ng-src="{{ card.imageUrl }}" data-holder-rendered="true" style="height: 200px; width: 100%; display: block;">
+        </a>
+        <div class="caption">
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.description }}</p>
+            <p>
+                <a href="{{ card.link }}" class="btn btn-primary" role="button" target="_blank">Check it out</a>
+            </p>
+        </div>
+    </div>
+</div>
