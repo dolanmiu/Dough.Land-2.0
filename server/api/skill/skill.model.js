@@ -1,12 +1,10 @@
-'use strict';
-
+/*globals require, module */
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var SkillSchema = new Schema({
-  name: String,
-  info: String,
-  active: Boolean
+    name: String,
+    level: Number
 });
 
 module.exports = mongoose.model('Skill', SkillSchema);

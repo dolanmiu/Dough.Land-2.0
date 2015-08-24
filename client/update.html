@@ -45,15 +45,17 @@
 
     <!-- Add your site or application content here -->
     <div class="container" ng-controller="UpdateController">
-        <h1>Seperate page for updating profile</h1>
-        <h2>Pull from LinkedIn:</h2>
-        <textarea id="currentProfileBox" rows="10" style="width:100%"></textarea>
-        <button class="btn btn-primary btn-lg" ng-click="addProfile()">Add Profile</button>
-        <a ng-href="/api/cv">
-            <button class="btn btn-primary btn-lg">Create CV</button>
-        </a>
+        <section>
+            <h1>Profile Management</h1>
+            <h3>Pull from LinkedIn:</h3>
+            <textarea id="currentProfileBox" rows="10" style="width:100%"></textarea>
+            <button class="btn btn-primary btn-lg" ng-click="addProfile()">Add Profile</button>
+            <a ng-href="/api/cv">
+                <button class="btn btn-primary btn-lg">Create CV</button>
+            </a>
+        </section>
 
-        <h2>Stored Profiles:</h2>
+        <h3>Stored Profiles:</h3>
         <div ng-repeat="profile in profiles">
             <div class="row form-group">
                 <div class="col-lg-9 col-xs-9">
@@ -71,6 +73,31 @@
             </div>
         </div>
 
+        <section>
+            <h3>Skill Config:</h3>
+            <div ng-show="profile.default" ng-repeat="profile in profiles">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Skill Name</th>
+                            <th>Skill Level</th>
+                            <th>Save</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="skill in profile.skills.values">
+                            <th scope="row">{{ skill.skill.name }}</th>
+                            <td>
+                                <input type="number" class="form-control input-sm">
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-success btn-block">Save</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -112,6 +139,7 @@
     <script src="bower_components/pie-chart/dist/pie-chart.min.js"></script>
     <script src="bower_components/angular-scroll/angular-scroll.js"></script>
     <script src="bower_components/ng-pageslide/dist/angular-pageslide-directive.js"></script>
+    <script src="bower_components/angular-deckgrid/angular-deckgrid.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
