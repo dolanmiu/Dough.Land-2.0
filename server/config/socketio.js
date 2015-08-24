@@ -18,6 +18,7 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/skill/skill.socket').register(socket);
   require('../api/github/github.socket').register(socket);
   require('../api/linkedin/linkedin.socket').register(socket);
   require('../api/thing/thing.socket').register(socket);
