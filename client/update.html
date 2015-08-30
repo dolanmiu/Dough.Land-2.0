@@ -88,10 +88,10 @@
                         <tr ng-repeat="skill in profile.skills.values">
                             <th scope="row">{{ skill.skill.name }}</th>
                             <td>
-                                <input type="number" class="form-control input-sm">
+                                <input type="number" class="form-control input-sm" ng-model="skill.level">
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-success btn-block">Save</button>
+                                <button class="btn btn-sm btn-success btn-block" ng-click="createOrUpdateSkill(skill.skill.name, skill.level)">Save</button>
                             </td>
                         </tr>
                     </tbody>

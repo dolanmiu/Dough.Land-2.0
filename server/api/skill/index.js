@@ -6,10 +6,10 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:id', controller.show);
+router.post('/createOrUpdate', controller.createOrUpdate);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
-router.post('/:id/createOrUpdate', controller.createOrUpdate);
 
 module.exports = router;

@@ -111,7 +111,8 @@ var LinkedinSchema = new Schema({
             id: Number,
             skill: {
                 name: String
-            }
+            },
+            level: Number
         }]
     },
     volunteer: {

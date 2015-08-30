@@ -1,8 +1,14 @@
+/*jslint nomen: true */
+/*globals require, exports */
 'use strict';
 
 var _ = require('lodash');
 var Skill = require('./skill.model');
 
+
+function handleError(res, err) {
+    return res.send(500, err);
+}
 // Get list of skills
 exports.index = function (req, res) {
     Skill.find(function (err, skills) {
@@ -77,13 +83,18 @@ exports.destroy = function (req, res) {
 };
 
 exports.createOrUpdate = function (req, res) {
-    /*Skill.update({
-        _id: req.param
-    }, req.body, {
-        upsert: true
-    }, function (err, skill) {});*/
+    Skill.findOrCreate({
+        name: req.body.name
+    }, function (err, skill, created) {
+        if (err) {
+            return handleError(res, err);
+        }
+        skill.level = req.body.level;
+        skill.save(function (err) {
+            if (err) {
+                return handleError(res, err);
+            }
+            return res.json(201, skill);
+        });
+    });
 };
-
-function handleError(res, err) {
-    return res.send(500, err);
-}

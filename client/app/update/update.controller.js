@@ -1,5 +1,6 @@
+/*jslint nomen: true */
 /*globals angular */
-angular.module('doughlandApp').controller('UpdateController', function ($scope, $http, socket) {
+angular.module('doughlandApp').controller('UpdateController', function ($scope, $http, socket, Skill) {
     'use strict';
 
     $http.get('/api/linkedin').success(function (profiles) {
@@ -40,4 +41,11 @@ angular.module('doughlandApp').controller('UpdateController', function ($scope, 
     $scope.$on('$destroy', function () {
         socket.unsyncUpdates('linkedin');
     });
+
+    $scope.createOrUpdateSkill = function (skillName, skillLevel) {
+        Skill.createOrUpdate({}, {
+            name: skillName,
+            level: skillLevel
+        });
+    };
 });
