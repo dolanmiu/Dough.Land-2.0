@@ -21,16 +21,21 @@ angular.module('doughlandApp').config(function ($stateProvider, $urlRouterProvid
 });
 
 angular.module('doughlandApp').run(function ($rootScope, LinkedIn) {
-    LinkedIn.get({
-        Id: 'getDefault'
-    }, function (profile) {
+    LinkedIn.getDefault(function (profile) {
         $rootScope.profile = profile;
     });
 });
 
 angular.module('doughlandApp').factory('LinkedIn', function ($resource) {
-    return $resource('/api/linkedin/:Id', {
-        Id: '@id'
+    return $resource('/api/linkedin/:id/:controller', {
+        id: '@id'
+    }, {
+        getDefault: {
+            method: 'GET',
+            params: {
+                controller: 'getDefault'
+            }
+        }
     });
 });
 

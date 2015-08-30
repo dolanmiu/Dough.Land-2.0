@@ -11,6 +11,26 @@ function handleError(res, err) {
     return res.send(500, err);
 }
 
+function populateSkillLevels(linkedin) {
+    var deferred = Q.defer();
+
+    Skill.find(function (err, dbSkills) {
+        if (err) {
+            return deferred.reject(err);
+        }
+        linkedin.skills.values.forEach(function (skill) {
+            dbSkills.forEach(function (dbSkill) {
+                if (skill.skill.name === dbSkill.name) {
+                    skill.level = dbSkill.level;
+                }
+            });
+        });
+        return deferred.resolve(linkedin);
+    });
+
+    return deferred.promise;
+}
+
 // Get list of linkedins
 exports.index = function (req, res) {
     var deferred = Q.defer(),
@@ -54,7 +74,9 @@ exports.create = function (req, res) {
         if (err) {
             return handleError(res, err);
         }
-        return res.json(201, linkedin);
+        populateSkillLevels(linkedin).then(function () {
+            return res.json(201, linkedin);
+        });
     });
 };
 
@@ -108,9 +130,10 @@ exports.getDefault = function (req, res) {
         if (!linkedin) {
             return res.send(500, 'No Default CV Present');
         }
-        Skill.find(function (err, skills) {
-            console.log(skills);
+
+        populateSkillLevels(linkedin).then(function (newLinkedin) {
+            return res.json(newLinkedin);
         });
-        res.json(linkedin);
+
     });
 };
