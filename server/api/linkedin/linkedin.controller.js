@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Linkedin = require('./linkedin.model');
+var Skill = require('../skill/skill.model');
 
 // Get list of linkedins
 exports.index = function (req, res) {
@@ -86,6 +87,9 @@ exports.getDefault = function (req, res) {
         if (!linkedin) {
             return res.send(500, 'No Default CV Present');
         }
+        Skill.find(function (err, skills) {
+           console.log(skills); 
+        });
         res.json(linkedin);
     });
 };

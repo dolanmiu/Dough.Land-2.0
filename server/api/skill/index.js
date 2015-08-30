@@ -1,5 +1,4 @@
-'use strict';
-
+/*globals require, export, module */
 var express = require('express');
 var controller = require('./skill.controller');
 
@@ -11,5 +10,6 @@ router.post('/', controller.create);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
+router.post('/:id/createOrUpdate', controller.createOrUpdate);
 
 module.exports = router;

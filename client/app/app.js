@@ -25,7 +25,6 @@ angular.module('doughlandApp').run(function ($rootScope, LinkedIn) {
         Id: 'getDefault'
     }, function (profile) {
         $rootScope.profile = profile;
-        console.log(profile);
     });
 });
 
@@ -45,6 +44,19 @@ angular.module('doughlandApp').factory('Cv', function ($resource) {
             method: 'GET',
             params: {
                 controller: 'download'
+            }
+        }
+    });
+});
+
+angular.module('doughlandApp').factory('Skill', function ($resource) {
+    return $resource('/api/skills/:id/:controller', {
+        id: '@_id'
+    }, {
+        createOrUpdate: {
+            method: 'POST',
+            params: {
+                controller: 'createOrUpdate'
             }
         }
     });
