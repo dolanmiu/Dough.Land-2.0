@@ -9,19 +9,30 @@ angular.module('doughlandApp').controller('MainCtrl', function ($scope, $window,
             s,
             milliseconds = currentDate.getTime() - date.getTime();
 
-        date = new Date(milliseconds);
-        m = date.getMinutes();
-        s = date.getSeconds();
-
-
         return {
-            minutes: m,
-            seconds: s
+            minutes: (milliseconds / 1000 / 60) << 0,
+            seconds: Math.floor((milliseconds / 1000) % 60)
         };
     }
 
+    function formatGitHub(raw) {
+        var gitHub = {
+            contributionsLastYear: {
+                amount: raw.results.contributionsLastYear[1].contributionsLastYear.replace(/[^0-9]+/, '')
+            },
+            longestStreak: {
+                amount: raw.results.collection2[1]['longest streak'].replace(/[^0-9]+/, '')
+            },
+            currentStreak: {
+                amount: raw.results.contributionsLastYear[1].currentStreak.replace(/[^0-9]+/, '')
+            }
+        };
+
+        return gitHub;
+    }
+
     GitHub.get({}, function (gitHub) {
-        $scope.gitHub = gitHub;
+        $scope.gitHub = formatGitHub(gitHub);
         $scope.gitHubTime = getlastUpdateTime(gitHub.thisversionrun);
     }, function (error) {
         GitHub.get({}, function (gitHub) {

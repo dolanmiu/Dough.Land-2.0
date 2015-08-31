@@ -6,7 +6,7 @@ var request = require('request');
 
 // Get list of githubs
 exports.index = function(req, res) {
-  request('https://www.kimonolabs.com/api/b73q9q58?&apikey=0dc941efa2f0a2807d63c75b5010706f&kimmodify=1', function (err, response, body) {
+  request('https://www.kimonolabs.com/api/azqq1x7m?apikey=0dc941efa2f0a2807d63c75b5010706f&kimmodify=1', function (err, response, body) {
     if(err) { return handleError(res, err); }
     if (response.statusCode === 200) {
       res.setHeader('Content-Type', 'application/json');
