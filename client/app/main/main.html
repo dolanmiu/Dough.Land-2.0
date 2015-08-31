@@ -19,15 +19,15 @@
         <div class="row">
             <div class="col-sm-4 col-xs-12">
                 <i class="fa fa-envelope-o fa-3x"></i>
-                <br><strong>E-mail: </strong><a href="mailto:dolan_miu@hotmail.com" target="_top">{{ profile.emailAddress }}</a>
+                <br><strong>E-mail:</strong> <a href="mailto:dolan_miu@hotmail.com" target="_top">{{ profile.emailAddress }}</a>
             </div>
             <div class="col-sm-4 col-xs-12">
                 <i class="fa fa-phone fa-3x"></i>
-                <br><strong>Phone number: </strong>{{ profile.phoneNumbers.values[0].phoneNumber }}
+                <br><strong>Phone number:</strong> {{ profile.phoneNumbers.values[0].phoneNumber }}
             </div>
             <div class="col-sm-4 col-xs-12">
                 <i class="fa fa-linkedin-square fa-3x"></i>
-                <br><strong>LinkedIn: </strong><a ng-href="{{ profile.publicProfileUrl }}" target="_blank">{{ profile.publicProfileUrl }}</a>
+                <br><strong>LinkedIn:</strong> <a ng-href="{{ profile.publicProfileUrl }}" target="_blank">{{ profile.publicProfileUrl }}</a>
             </div>
         </div>
     </div>
