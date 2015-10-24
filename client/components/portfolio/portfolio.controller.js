@@ -23,7 +23,7 @@ angular.module('doughlandApp').controller('PortfolioController', function ($scop
         description: 'A competition I entered in which one has to develop something interesting and unique with the API they provide. I decided on creating a nature or city (or anything in between) soundscape which is powered by the events which happen directly in game. Perfect for studying, or relaxing. Sounds made using Logic Pro, and from freesounds.org. Made using AngularJS. It was originally made for the URF event, now it works universally! Horray!',
         link: 'https://lol-soundscape.herokuapp.com/'
     }, {
-        imageUrl: 'assets/images/urf-soundscape-thumbnail.png',
+        imageUrl: 'assets/images/grunt-google-translate-thumbnail.png',
         title: 'Grunt Google Translate',
         description: 'A build task to translate JSON files to other languages using Google\'s Translation API. Pairs very well with angular-translate!',
         link: 'https://www.npmjs.com/package/grunt-google-translate'
