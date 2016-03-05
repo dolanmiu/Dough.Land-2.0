@@ -1,8 +1,6 @@
 module WaterSkillGame.States {
     export interface IMainState extends Phaser.State {
-        setJackpotItemsArray(array: Array<Models.JackpotEntry>, maxItems: number);
-        setWinner(winner: any);
-        setTime(time: any);
+        setJackpotItemsArray(array: Array<Models.SkillModel>, maxItems: number);
         setWaterLevel(level?: number, delay?: number);
     }
 
@@ -14,10 +12,8 @@ module WaterSkillGame.States {
         private jackpotEntries: Prefabs.JackpotEntries;
         private buoyancyManager: Prefabs.BuoyancyManager;
         private priceText: Prefabs.PriceText;
-        private maxItems: number;
-        private winnerFactory: Prefabs.WinnerFactory;
         private avatarSpriteLoader: Prefabs.AvatarSpriteLoader;
-        private winner: Prefabs.Winner;
+
         private winnerText: Prefabs.WinnerText;
         private timerText: Prefabs.TimerText;
         private avatarGroup: Phaser.Group;
@@ -53,7 +49,6 @@ module WaterSkillGame.States {
 
             this.avatarSpriteLoader = new Prefabs.AvatarSpriteLoader(this.game, this.game.apiDomain);
             this.avatarSpriteLoader.crossOrigin = "anonymous";
-            this.winnerFactory = new Prefabs.WinnerFactory(this.game, this.avatarSpriteLoader, this.winnerGroup);
 
             this.game.stateLoadedCallback();
 
@@ -67,10 +62,6 @@ module WaterSkillGame.States {
         }
 
         update() {
-            if (this.jackpotEntries && this.jackpotEntries.checkChanged()) {
-                this.doChanged();
-            }
-
             this.waterMask.clear();
             this.graphics.clear();
             this.water.update(this.graphics, this.waterMask);
@@ -86,23 +77,6 @@ module WaterSkillGame.States {
             this.timerText.update();
         }
 
-        private doChanged() {
-            this.priceText.setPriceText(this.jackpotEntries.calculateTotalPrice());
-            this.priceText.setSlotText(this.jackpotEntries.getCount(), this.maxItems);
-
-            if (this.winner) {
-                this.winner.kill();
-                this.winnerText.clear();
-            }
-
-            if (this.jackpotEntries.getCount() == 0) {
-                this.jackpotEntries.clear();
-            } else {
-                this.jackpotEntries.calculateAvatars();
-                this.water.setLevel(this.jackpotEntries.calculateLevel());
-            }
-        }
-
         private setUpPhysics() {
             this.game.physics.startSystem(Phaser.Physics.P2JS);
             this.game.physics.p2.gravity.y = 1000;
@@ -113,30 +87,10 @@ module WaterSkillGame.States {
             this.water.setLevel(level, delay);
         }
 
-        public setJackpotItemsArray(array: Array<Models.JackpotEntry>, maxItems: number) {
-            this.maxItems = maxItems;
+        public setJackpotItemsArray(array: Array<Models.SkillModel>, maxItems: number) {
             this.jackpotEntries = new Prefabs.JackpotEntries(this.game, array, maxItems, this.water, this.avatarSpriteLoader, this.avatarGroup);
             this.jackpotEntries.calculateAvatars();
             this.water.setLevel(this.jackpotEntries.calculateLevel());
-        }
-
-        public setWinner(winnerJson: any) {
-            //this.water.setLevel(1, Phaser.Timer.SECOND * 1);
-            this.game.time.events.add(Phaser.Timer.SECOND * 5, () => {
-                this.water.splash(this.game.width / 2, 150);
-                this.winnerText.slideUp(this.game.height / 3 * 2, Phaser.Timer.SECOND * 2);
-            });
-            setTimeout(() => {
-                this.winnerFactory.newInstance(winnerJson.user._id, winner => {
-                    this.winner = winner;
-                    this.winnerText.text = winnerJson.user.name + ' won with ' + (winnerJson.chance * 100).toFixed(2) + '% chance';
-                });
-            }, Phaser.Timer.SECOND * 2);
-            this.timerText.hardReset();
-        }
-
-        public setTime(time: number) {
-            this.timerText.setTime(time);
         }
     }
 }
