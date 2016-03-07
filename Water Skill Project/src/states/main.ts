@@ -1,6 +1,6 @@
 module WaterSkillGame.States {
     export interface IMainState extends Phaser.State {
-        setJackpotItemsArray(array: Array<Models.SkillModel>, maxItems: number);
+        setItemsArray(array: Array<Models.SkillModel>, maxItems: number);
         setWaterLevel(level?: number, delay?: number);
     }
 
@@ -11,18 +11,12 @@ module WaterSkillGame.States {
         private water: Prefabs.Water;
         private jackpotEntries: Prefabs.JackpotEntries;
         private buoyancyManager: Prefabs.BuoyancyManager;
-        private priceText: Prefabs.PriceText;
         private avatarSpriteLoader: Prefabs.AvatarSpriteLoader;
+        private skillPillFactory: Prefabs.SkillPillFactory;
 
-        private winnerText: Prefabs.WinnerText;
-        private timerText: Prefabs.TimerText;
         private avatarGroup: Phaser.Group;
         private waterGroup: Phaser.Group;
         private winnerGroup: Phaser.Group;
-
-        preload() {
-            this.game.stage.disableVisibilityChange = true;
-        }
 
         constructor() {
             super();
@@ -45,19 +39,19 @@ module WaterSkillGame.States {
             this.graphics = this.game.add.graphics(0, 0);
             this.waterMask = new Phaser.Graphics(this.game, 0, 0);
 
-            this.priceText = new Prefabs.PriceText(this.game, this.waterMask);
+            //this.avatarSpriteLoader = new Prefabs.AvatarSpriteLoader(this.game);
+            //this.avatarSpriteLoader.crossOrigin = "anonymous";
 
-            this.avatarSpriteLoader = new Prefabs.AvatarSpriteLoader(this.game, this.game.apiDomain);
-            this.avatarSpriteLoader.crossOrigin = "anonymous";
-
+            this.skillPillFactory = new Prefabs.SkillPillFactory(this.game);
+            var skillPill = this.skillPillFactory.newInstance();
+            this.game.add.existing(skillPill);
+            
+            this.water.setLevel(0.5);
             this.game.stateLoadedCallback();
 
             this.game.scale.onSizeChange.add(() => {
                 this.water.setLevel();
             });
-
-            this.winnerText = new Prefabs.WinnerText(this.game, this.game.height / 4 * 3);
-            this.timerText = new Prefabs.TimerText(this.game, this.waterMask);
             //this.waterGroup.add(this.priceText);
         }
 
@@ -68,13 +62,9 @@ module WaterSkillGame.States {
             this.graphics.endFill();
             this.waterMask.endFill();
 
-            this.jackpotEntries.forEachAvatar(avatar => {
+            /*this.jackpotEntries.forEachAvatar(avatar => {
                 this.buoyancyManager.applyAABBBuoyancyForces(avatar.body, this.water.getWaterLevel(avatar.position.x));
-            });
-
-            this.priceText.update();
-            this.winnerText.update();
-            this.timerText.update();
+            });*/
         }
 
         private setUpPhysics() {
@@ -83,14 +73,14 @@ module WaterSkillGame.States {
             this.game.physics.p2.restitution = 0.3;
         }
 
-        public setWaterLevel(level?: number, delay?: number) {
+        setWaterLevel(level?: number, delay?: number) {
             this.water.setLevel(level, delay);
         }
 
-        public setJackpotItemsArray(array: Array<Models.SkillModel>, maxItems: number) {
-            this.jackpotEntries = new Prefabs.JackpotEntries(this.game, array, maxItems, this.water, this.avatarSpriteLoader, this.avatarGroup);
-            this.jackpotEntries.calculateAvatars();
-            this.water.setLevel(this.jackpotEntries.calculateLevel());
+        setItemsArray(array: Array<Models.SkillModel>, maxItems: number) {
+            //this.jackpotEntries = new Prefabs.JackpotEntries(this.game, array, maxItems, this.water, this.avatarSpriteLoader, this.avatarGroup);
+            //this.jackpotEntries.calculateAvatars();
+            //this.water.setLevel(this.jackpotEntries.calculateLevel());
         }
     }
 }

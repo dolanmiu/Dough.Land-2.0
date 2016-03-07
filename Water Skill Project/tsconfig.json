@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "es5",
         "sourceMap": false,
-        "outFile": "build/game.js",
+        "outFile": "../client/components/water/app.js",
         "rootDir": "src"
     }
 }

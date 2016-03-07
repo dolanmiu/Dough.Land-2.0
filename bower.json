@@ -17,7 +17,6 @@
     "angular-socket-io": "~0.6.0",
     "angular-ui-router": "~0.2.10",
     "fontawesome": "~4.3.0",
-    "threejs": "r71",
     "ngSticky": "~1.7.9",
     "pie-chart": "~1.0.0",
     "d3": "~3.5.5",
