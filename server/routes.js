@@ -13,6 +13,7 @@ module.exports = function (app) {
     app.use('/api/github', require('./api/github'));
     app.use('/api/linkedin', require('./api/linkedin'));
     app.use('/api/things', require('./api/thing'));
+    app.use('/api/images', require('./api/image'))
 
     app.use('/cv', require('./cv'));
     
