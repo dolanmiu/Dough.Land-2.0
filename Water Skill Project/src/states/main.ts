@@ -1,6 +1,6 @@
 module WaterSkillGame.States {
     export interface IMainState extends Phaser.State {
-        setItemsArray(array: Array<Models.SkillModel>, maxItems: number);
+        setItemsArray(array: Array<Models.SkillModel>);
         setWaterLevel(level?: number, delay?: number);
     }
 
@@ -11,7 +11,6 @@ module WaterSkillGame.States {
         private water: Prefabs.Water;
         private jackpotEntries: Prefabs.JackpotEntries;
         private buoyancyManager: Prefabs.BuoyancyManager;
-        private avatarSpriteLoader: Prefabs.AvatarSpriteLoader;
         private skillPillFactory: Prefabs.SkillPillFactory;
 
         private avatarGroup: Phaser.Group;
@@ -39,13 +38,10 @@ module WaterSkillGame.States {
             this.graphics = this.game.add.graphics(0, 0);
             this.waterMask = new Phaser.Graphics(this.game, 0, 0);
 
-            //this.avatarSpriteLoader = new Prefabs.AvatarSpriteLoader(this.game);
-            //this.avatarSpriteLoader.crossOrigin = "anonymous";
-
             this.skillPillFactory = new Prefabs.SkillPillFactory(this.game);
             var skillPill = this.skillPillFactory.newInstance();
             this.game.add.existing(skillPill);
-            
+
             this.water.setLevel(0.5);
             this.game.stateLoadedCallback();
 
@@ -77,7 +73,11 @@ module WaterSkillGame.States {
             this.water.setLevel(level, delay);
         }
 
-        setItemsArray(array: Array<Models.SkillModel>, maxItems: number) {
+        setItemsArray(array: Array<Models.SkillModel>) {
+            array.forEach(skillModel => {
+                var skillPill = this.skillPillFactory.newInstance(100, 100, skillModel.skill.name);
+                this.game.add.existing(skillPill);
+            });
             //this.jackpotEntries = new Prefabs.JackpotEntries(this.game, array, maxItems, this.water, this.avatarSpriteLoader, this.avatarGroup);
             //this.jackpotEntries.calculateAvatars();
             //this.water.setLevel(this.jackpotEntries.calculateLevel());

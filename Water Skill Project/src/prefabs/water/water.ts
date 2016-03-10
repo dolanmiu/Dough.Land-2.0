@@ -1,54 +1,4 @@
 module WaterSkillGame.Prefabs {
-
-    class WaterPoint extends Phaser.Point {
-
-        private k: number;
-        private activeTween: Phaser.Tween;
-        private game: Phaser.Game;
-        private tweenQueue: Array<Phaser.Tween>;
-
-        public targetHeight: number;
-        public speed: number;
-
-        constructor(game: Phaser.Game, x: number, y: number, targetHeight: number, k: number) {
-            this.targetHeight = targetHeight;
-            this.k = k;
-            this.game = game;
-            this.speed = 0;
-            this.activeTween = game.add.tween(this).to({ y: y, targetHeight: targetHeight }, 10, Phaser.Easing.Linear.None, true);
-            this.tweenQueue = new Array<Phaser.Tween>();
-            super(x, y);
-        }
-
-        update(dampening: number, tension: number) {
-            var deltaY = this.targetHeight - this.y;
-            this.speed += tension * deltaY - this.speed * dampening;
-            this.y += this.speed;
-        }
-
-        setLevel(height, delay, callback?: () => void) {
-            var newTween = this.game.add.tween(this).to({ targetHeight: height }, delay, Phaser.Easing.Cubic.Out);
-            newTween.start();
-            if (callback) {
-                newTween.onComplete.add(callback);
-            }
-            /*newTween.onComplete.add(() => {
-                console.log("done");
-                var tween = this.tweenQueue.shift();
-
-                if (!_.isUndefined(tween)) {
-                    tween.start();
-                }
-            });
-            
-            this.tweenQueue.push(newTween);
-
-            if (this.tweenQueue.length == 1) {
-                this.tweenQueue[0].start();
-            }*/
-        }
-    }
-
     export class Water extends Phaser.Polygon {
 
         private game: Phaser.Game;
@@ -60,6 +10,7 @@ module WaterSkillGame.Prefabs {
         private level: number;
 
         constructor(game: Phaser.Game, level: number) {
+            super(this.createWater(this.waterPoints));
             this.game = game;
             this.k = 0.025;
             this.passThroughs = 1;
@@ -68,7 +19,6 @@ module WaterSkillGame.Prefabs {
             this.level = level;
 
             this.waterPoints = this.createwaterPoints(this.resolution, this.calculateWaterHeight(), this.k);
-            super(this.createWater(this.waterPoints));
             this.game.physics.p2.enable(this);
         }
 
@@ -79,7 +29,7 @@ module WaterSkillGame.Prefabs {
 
             var leftDeltas = Array<number>();
             var rightDeltas = Array<number>();
-             
+
             // do some passes where this.waterPoints pull on their neighbours
             for (var j = 0; j < this.passThroughs; j++) {
                 for (var i = 0; i < this.waterPoints.length - 3; i++) {

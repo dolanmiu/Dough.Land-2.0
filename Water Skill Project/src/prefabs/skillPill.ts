@@ -6,7 +6,7 @@ module WaterSkillGame.Prefabs {
 
         constructor(game: Phaser.Game, x: number, y: number) {
             super(game, x, y);
-
+            
             this.game.physics.p2.enable(this);
             //this.water = water;
             this.body.angularVelocity = (Math.random() * 8) - 4;

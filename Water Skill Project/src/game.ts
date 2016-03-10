@@ -15,10 +15,10 @@ module WaterSkillGame {
             this.game.stateLoadedCallback = loadedCallback;
         }
 
-        setItemsArray(array: Array<Models.SkillModel>, maxItems: number) {
+        setItemsArray(array: Array<Models.SkillModel>) {
             var state = <States.IMainState>this.game.state.getCurrentState();
             if (state) {
-                state.setJackpotItemsArray(array, maxItems);
+                state.setItemsArray(array);
             }
         }
 
