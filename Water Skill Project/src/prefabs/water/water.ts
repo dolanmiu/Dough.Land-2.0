@@ -2,23 +2,21 @@ module WaterSkillGame.Prefabs {
     export class Water extends Phaser.Polygon {
 
         private game: Phaser.Game;
-        private k: number;
         private waterPoints: WaterPoint[];
         private passThroughs: number;
         private spread: number;
         private resolution: number;
         private level: number;
 
-        constructor(game: Phaser.Game, level: number) {
-            super(this.createWater(this.waterPoints));
+        constructor(game: Phaser.Game, level: number, resolution: number, points: Phaser.Point[], waterPoints: WaterPoint[]) {
+            super(points);
             this.game = game;
-            this.k = 0.025;
             this.passThroughs = 1;
             this.spread = 0.25;
-            this.resolution = 20;
+            this.resolution = resolution;
             this.level = level;
+            this.waterPoints = waterPoints;
 
-            this.waterPoints = this.createwaterPoints(this.resolution, this.calculateWaterHeight(), this.k);
             this.game.physics.p2.enable(this);
         }
 
@@ -72,21 +70,7 @@ module WaterSkillGame.Prefabs {
             this.waterPoints[this.waterPoints.length - 1].y = this.game.height;
         }
 
-        private createwaterPoints(resolution: number, waterHeight: number, k: number): WaterPoint[] {
-            var points = Array<WaterPoint>();
-            var singleLength = this.game.width / resolution;
 
-            for (var i = 0; i <= resolution; i++) {
-                points.push(new WaterPoint(this.game, singleLength * i, waterHeight, waterHeight, k));
-            }
-            return points;
-        }
-
-        private createWater(waterPoints: Phaser.Point[]): Phaser.Point[] {
-            waterPoints.push(new Phaser.Point(this.game.width, this.game.height));
-            waterPoints.push(new Phaser.Point(0, this.game.height));
-            return waterPoints;
-        }
 
         private calculateWaterHeight(): number {
             return this.game.height - (this.game.height * this.level);

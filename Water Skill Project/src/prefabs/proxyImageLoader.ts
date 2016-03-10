@@ -6,7 +6,7 @@ module WaterSkillGame.Prefabs {
         }
 
         load(key: string, callback: (key: string) => void) {          
-            this.image(key, '/api/proxy/images' + key, false);
+            this.image(key, '/api/proxy/images/' + key, false);
             this.onLoadComplete.addOnce(() => {
                 callback(key);
             });

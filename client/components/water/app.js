@@ -10,10 +10,10 @@ var WaterSkillGame;
             this.game = new Phaser.Game(this.width, this.height, Phaser.AUTO, container, WaterSkillGame.States.MainState);
             this.game.stateLoadedCallback = loadedCallback;
         };
-        Game.prototype.setItemsArray = function (array, maxItems) {
+        Game.prototype.setItemsArray = function (array) {
             var state = this.game.state.getCurrentState();
             if (state) {
-                state.setJackpotItemsArray(array, maxItems);
+                state.setItemsArray(array);
             }
         };
         Game.prototype.setWaterLevel = function (percentage, delay) {
@@ -86,35 +86,6 @@ var WaterSkillGame;
             return Avatar;
         })(Phaser.Sprite);
         Prefabs.Avatar = Avatar;
-    })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
-})(WaterSkillGame || (WaterSkillGame = {}));
-var WaterSkillGame;
-(function (WaterSkillGame) {
-    var Prefabs;
-    (function (Prefabs) {
-        var AvatarSpriteLoader = (function (_super) {
-            __extends(AvatarSpriteLoader, _super);
-            function AvatarSpriteLoader(game, apiDomain) {
-                this.avatarDictionary = {};
-                this.apiDomain = apiDomain;
-                _super.call(this, game);
-            }
-            AvatarSpriteLoader.prototype.loadAvatar = function (key, callback) {
-                var _this = this;
-                if (this.avatarDictionary[key] == true) {
-                    callback(key);
-                    return;
-                }
-                this.image(key, this.apiDomain + '/api/proxy/' + key + '/avatar', true);
-                this.onLoadComplete.addOnce(function () {
-                    _this.avatarDictionary[key] = true;
-                    callback(key);
-                });
-                this.start();
-            };
-            return AvatarSpriteLoader;
-        })(Phaser.Loader);
-        Prefabs.AvatarSpriteLoader = AvatarSpriteLoader;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
 var WaterSkillGame;
@@ -267,6 +238,27 @@ var WaterSkillGame;
 (function (WaterSkillGame) {
     var Prefabs;
     (function (Prefabs) {
+        var ProxyImageLoader = (function (_super) {
+            __extends(ProxyImageLoader, _super);
+            function ProxyImageLoader(game) {
+                _super.call(this, game);
+            }
+            ProxyImageLoader.prototype.load = function (key, callback) {
+                this.image(key, '/api/proxy/images/' + key, false);
+                this.onLoadComplete.addOnce(function () {
+                    callback(key);
+                });
+                this.start();
+            };
+            return ProxyImageLoader;
+        })(Phaser.Loader);
+        Prefabs.ProxyImageLoader = ProxyImageLoader;
+    })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
+})(WaterSkillGame || (WaterSkillGame = {}));
+var WaterSkillGame;
+(function (WaterSkillGame) {
+    var Prefabs;
+    (function (Prefabs) {
         var SkillPill = (function (_super) {
             __extends(SkillPill, _super);
             function SkillPill(game, x, y) {
@@ -308,166 +300,18 @@ var WaterSkillGame;
         var SkillPillFactory = (function () {
             function SkillPillFactory(game) {
                 this.game = game;
+                this.imageLoader = new Prefabs.ProxyImageLoader(game);
             }
-            SkillPillFactory.prototype.newInstance = function (x, y) {
-                return new Prefabs.SkillPill(this.game, x, y);
+            SkillPillFactory.prototype.newInstance = function (x, y, term) {
+                var skillPill = new Prefabs.SkillPill(this.game, x, y);
+                this.imageLoader.load(term, function (key) {
+                    skillPill.loadTexture(key);
+                });
+                return skillPill;
             };
             return SkillPillFactory;
         })();
         Prefabs.SkillPillFactory = SkillPillFactory;
-    })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
-})(WaterSkillGame || (WaterSkillGame = {}));
-var WaterSkillGame;
-(function (WaterSkillGame) {
-    var Prefabs;
-    (function (Prefabs) {
-        var WaterPoint = (function (_super) {
-            __extends(WaterPoint, _super);
-            function WaterPoint(game, x, y, targetHeight, k) {
-                this.targetHeight = targetHeight;
-                this.k = k;
-                this.game = game;
-                this.speed = 0;
-                this.activeTween = game.add.tween(this).to({ y: y, targetHeight: targetHeight }, 10, Phaser.Easing.Linear.None, true);
-                this.tweenQueue = new Array();
-                _super.call(this, x, y);
-            }
-            WaterPoint.prototype.update = function (dampening, tension) {
-                var deltaY = this.targetHeight - this.y;
-                this.speed += tension * deltaY - this.speed * dampening;
-                this.y += this.speed;
-            };
-            WaterPoint.prototype.setLevel = function (height, delay, callback) {
-                var newTween = this.game.add.tween(this).to({ targetHeight: height }, delay, Phaser.Easing.Cubic.Out);
-                newTween.start();
-                if (callback) {
-                    newTween.onComplete.add(callback);
-                }
-                /*newTween.onComplete.add(() => {
-                    console.log("done");
-                    var tween = this.tweenQueue.shift();
-    
-                    if (!_.isUndefined(tween)) {
-                        tween.start();
-                    }
-                });
-                
-                this.tweenQueue.push(newTween);
-    
-                if (this.tweenQueue.length == 1) {
-                    this.tweenQueue[0].start();
-                }*/
-            };
-            return WaterPoint;
-        })(Phaser.Point);
-        var Water = (function (_super) {
-            __extends(Water, _super);
-            function Water(game, level) {
-                this.game = game;
-                this.k = 0.025;
-                this.passThroughs = 1;
-                this.spread = 0.25;
-                this.resolution = 20;
-                this.level = level;
-                this.waterPoints = this.createwaterPoints(this.resolution, this.calculateWaterHeight(), this.k);
-                _super.call(this, this.createWater(this.waterPoints));
-                this.game.physics.p2.enable(this);
-            }
-            Water.prototype.update = function () {
-                var _this = this;
-                var graphicsCollection = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    graphicsCollection[_i - 0] = arguments[_i];
-                }
-                for (var i = 0; i < this.waterPoints.length - 2; i++) {
-                    this.waterPoints[i].update(0.025, 0.025);
-                }
-                var leftDeltas = Array();
-                var rightDeltas = Array();
-                // do some passes where this.waterPoints pull on their neighbours
-                for (var j = 0; j < this.passThroughs; j++) {
-                    for (var i = 0; i < this.waterPoints.length - 3; i++) {
-                        if (i > 0) {
-                            leftDeltas[i] = this.spread * (this.waterPoints[i].y - this.waterPoints[i - 1].y);
-                            this.waterPoints[i - 1].speed += leftDeltas[i];
-                        }
-                        if (i < this.waterPoints.length - 1) {
-                            rightDeltas[i] = this.spread * (this.waterPoints[i].y - this.waterPoints[i + 1].y);
-                            this.waterPoints[i + 1].speed += rightDeltas[i];
-                        }
-                    }
-                    for (var i = 0; i < this.waterPoints.length - 3; i++) {
-                        if (i > 0)
-                            this.waterPoints[i - 1].y += leftDeltas[i];
-                        if (i < this.waterPoints.length - 1)
-                            this.waterPoints[i + 1].y += rightDeltas[i];
-                    }
-                }
-                this.fixWaterPositions();
-                graphicsCollection.forEach(function (graphics) {
-                    graphics.beginFill(0x4da6ff);
-                    _this.points = _this.waterPoints;
-                    graphics.drawPolygon(_this.points);
-                });
-            };
-            Water.prototype.fixWaterPositions = function () {
-                var singleLength = this.game.width / this.resolution;
-                for (var i = 0; i <= this.waterPoints.length - 3; i++) {
-                    this.waterPoints[i].x = singleLength * i;
-                }
-                this.waterPoints[this.waterPoints.length - 2].x = this.game.width;
-                this.waterPoints[this.waterPoints.length - 2].y = this.game.height;
-                this.waterPoints[this.waterPoints.length - 1].y = this.game.height;
-            };
-            Water.prototype.createwaterPoints = function (resolution, waterHeight, k) {
-                var points = Array();
-                var singleLength = this.game.width / resolution;
-                for (var i = 0; i <= resolution; i++) {
-                    points.push(new WaterPoint(this.game, singleLength * i, waterHeight, waterHeight, k));
-                }
-                return points;
-            };
-            Water.prototype.createWater = function (waterPoints) {
-                waterPoints.push(new Phaser.Point(this.game.width, this.game.height));
-                waterPoints.push(new Phaser.Point(0, this.game.height));
-                return waterPoints;
-            };
-            Water.prototype.calculateWaterHeight = function () {
-                return this.game.height - (this.game.height * this.level);
-            };
-            Water.prototype.splash = function (position, speed) {
-                var singleLength = this.game.width / this.resolution;
-                var index = Math.round(position / singleLength);
-                if (index >= 0 && index < this.waterPoints.length) {
-                    this.waterPoints[index].speed = speed;
-                }
-            };
-            Water.prototype.setLevel = function (percentage, delay, callback) {
-                if (_.isUndefined(delay)) {
-                    delay = Phaser.Timer.SECOND * 2;
-                }
-                if (!_.isUndefined(percentage)) {
-                    this.level = percentage;
-                }
-                for (var i = 0; i < this.waterPoints.length - 2; i++) {
-                    this.waterPoints[i].setLevel(this.calculateWaterHeight(), delay, callback);
-                }
-                ;
-            };
-            Water.prototype.resize = function () {
-                this.setLevel(this.level);
-            };
-            Water.prototype.getWaterLevel = function (position) {
-                var singleLength = this.game.width / this.resolution;
-                var index = Math.round(position / singleLength);
-                if (index >= this.waterPoints.length || index < 0) {
-                    return new Phaser.Point(0, this.waterPoints[0].y);
-                }
-                return new Phaser.Point(0, this.waterPoints[index].y);
-            };
-            return Water;
-        })(Phaser.Polygon);
-        Prefabs.Water = Water;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
 var WaterSkillGame;
@@ -617,6 +461,186 @@ var WaterSkillGame;
 })(WaterSkillGame || (WaterSkillGame = {}));
 var WaterSkillGame;
 (function (WaterSkillGame) {
+    var Prefabs;
+    (function (Prefabs) {
+        var Water = (function (_super) {
+            __extends(Water, _super);
+            function Water(game, level, resolution, points, waterPoints) {
+                _super.call(this, points);
+                this.game = game;
+                this.passThroughs = 1;
+                this.spread = 0.25;
+                this.resolution = resolution;
+                this.level = level;
+                this.waterPoints = waterPoints;
+                this.game.physics.p2.enable(this);
+            }
+            Water.prototype.update = function () {
+                var _this = this;
+                var graphicsCollection = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    graphicsCollection[_i - 0] = arguments[_i];
+                }
+                for (var i = 0; i < this.waterPoints.length - 2; i++) {
+                    this.waterPoints[i].update(0.025, 0.025);
+                }
+                var leftDeltas = Array();
+                var rightDeltas = Array();
+                // do some passes where this.waterPoints pull on their neighbours
+                for (var j = 0; j < this.passThroughs; j++) {
+                    for (var i = 0; i < this.waterPoints.length - 3; i++) {
+                        if (i > 0) {
+                            leftDeltas[i] = this.spread * (this.waterPoints[i].y - this.waterPoints[i - 1].y);
+                            this.waterPoints[i - 1].speed += leftDeltas[i];
+                        }
+                        if (i < this.waterPoints.length - 1) {
+                            rightDeltas[i] = this.spread * (this.waterPoints[i].y - this.waterPoints[i + 1].y);
+                            this.waterPoints[i + 1].speed += rightDeltas[i];
+                        }
+                    }
+                    for (var i = 0; i < this.waterPoints.length - 3; i++) {
+                        if (i > 0)
+                            this.waterPoints[i - 1].y += leftDeltas[i];
+                        if (i < this.waterPoints.length - 1)
+                            this.waterPoints[i + 1].y += rightDeltas[i];
+                    }
+                }
+                this.fixWaterPositions();
+                graphicsCollection.forEach(function (graphics) {
+                    graphics.beginFill(0x4da6ff);
+                    _this.points = _this.waterPoints;
+                    graphics.drawPolygon(_this.points);
+                });
+            };
+            Water.prototype.fixWaterPositions = function () {
+                var singleLength = this.game.width / this.resolution;
+                for (var i = 0; i <= this.waterPoints.length - 3; i++) {
+                    this.waterPoints[i].x = singleLength * i;
+                }
+                this.waterPoints[this.waterPoints.length - 2].x = this.game.width;
+                this.waterPoints[this.waterPoints.length - 2].y = this.game.height;
+                this.waterPoints[this.waterPoints.length - 1].y = this.game.height;
+            };
+            Water.prototype.calculateWaterHeight = function () {
+                return this.game.height - (this.game.height * this.level);
+            };
+            Water.prototype.splash = function (position, speed) {
+                var singleLength = this.game.width / this.resolution;
+                var index = Math.round(position / singleLength);
+                if (index >= 0 && index < this.waterPoints.length) {
+                    this.waterPoints[index].speed = speed;
+                }
+            };
+            Water.prototype.setLevel = function (percentage, delay, callback) {
+                if (_.isUndefined(delay)) {
+                    delay = Phaser.Timer.SECOND * 2;
+                }
+                if (!_.isUndefined(percentage)) {
+                    this.level = percentage;
+                }
+                for (var i = 0; i < this.waterPoints.length - 2; i++) {
+                    this.waterPoints[i].setLevel(this.calculateWaterHeight(), delay, callback);
+                }
+                ;
+            };
+            Water.prototype.resize = function () {
+                this.setLevel(this.level);
+            };
+            Water.prototype.getWaterLevel = function (position) {
+                var singleLength = this.game.width / this.resolution;
+                var index = Math.round(position / singleLength);
+                if (index >= this.waterPoints.length || index < 0) {
+                    return new Phaser.Point(0, this.waterPoints[0].y);
+                }
+                return new Phaser.Point(0, this.waterPoints[index].y);
+            };
+            return Water;
+        })(Phaser.Polygon);
+        Prefabs.Water = Water;
+    })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
+})(WaterSkillGame || (WaterSkillGame = {}));
+var WaterSkillGame;
+(function (WaterSkillGame) {
+    var Prefabs;
+    (function (Prefabs) {
+        var WaterPoint = (function (_super) {
+            __extends(WaterPoint, _super);
+            function WaterPoint(game, x, y, targetHeight, k) {
+                _super.call(this, x, y);
+                this.targetHeight = targetHeight;
+                this.k = k;
+                this.game = game;
+                this.speed = 0;
+                this.activeTween = game.add.tween(this).to({ y: y, targetHeight: targetHeight }, 10, Phaser.Easing.Linear.None, true);
+                this.tweenQueue = new Array();
+            }
+            WaterPoint.prototype.update = function (dampening, tension) {
+                var deltaY = this.targetHeight - this.y;
+                this.speed += tension * deltaY - this.speed * dampening;
+                this.y += this.speed;
+            };
+            WaterPoint.prototype.setLevel = function (height, delay, callback) {
+                var newTween = this.game.add.tween(this).to({ targetHeight: height }, delay, Phaser.Easing.Cubic.Out);
+                newTween.start();
+                if (callback) {
+                    newTween.onComplete.add(callback);
+                }
+                /*newTween.onComplete.add(() => {
+                    console.log("done");
+                    var tween = this.tweenQueue.shift();
+    
+                    if (!_.isUndefined(tween)) {
+                        tween.start();
+                    }
+                });
+                
+                this.tweenQueue.push(newTween);
+    
+                if (this.tweenQueue.length == 1) {
+                    this.tweenQueue[0].start();
+                }*/
+            };
+            return WaterPoint;
+        })(Phaser.Point);
+        Prefabs.WaterPoint = WaterPoint;
+    })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
+})(WaterSkillGame || (WaterSkillGame = {}));
+var WaterSkillGame;
+(function (WaterSkillGame) {
+    var Prefabs;
+    (function (Prefabs) {
+        var WaterFactory = (function () {
+            function WaterFactory(game) {
+                this.game = game;
+                this.k = 0.025;
+                this.resolution = 20;
+            }
+            WaterFactory.prototype.newInstance = function (level) {
+                var waterHeight = this.game.height - (this.game.height * level);
+                var waterPoints = this.createwaterPoints(this.resolution, waterHeight, this.k);
+                var points = this.createWater(waterPoints);
+                return new Prefabs.Water(this.game, level, this.resolution, points, waterPoints);
+            };
+            WaterFactory.prototype.createwaterPoints = function (resolution, waterHeight, k) {
+                var points = Array();
+                var singleLength = this.game.width / resolution;
+                for (var i = 0; i <= resolution; i++) {
+                    points.push(new Prefabs.WaterPoint(this.game, singleLength * i, waterHeight, waterHeight, k));
+                }
+                return points;
+            };
+            WaterFactory.prototype.createWater = function (waterPoints) {
+                waterPoints.push(new Phaser.Point(this.game.width, this.game.height));
+                waterPoints.push(new Phaser.Point(0, this.game.height));
+                return waterPoints;
+            };
+            return WaterFactory;
+        })();
+        Prefabs.WaterFactory = WaterFactory;
+    })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
+})(WaterSkillGame || (WaterSkillGame = {}));
+var WaterSkillGame;
+(function (WaterSkillGame) {
     var States;
     (function (States) {
         var MainState = (function (_super) {
@@ -630,19 +654,15 @@ var WaterSkillGame;
                 this.waterGroup = this.game.add.group();
                 this.winnerGroup = this.game.add.group();
                 this.setUpPhysics();
-                this.water = new WaterSkillGame.Prefabs.Water(this.game, 0);
+                this.waterFactory = new WaterSkillGame.Prefabs.WaterFactory(this.game);
+                this.water = this.waterFactory.newInstance(0.5);
                 this.buoyancyManager = new WaterSkillGame.Prefabs.BuoyancyManager(0.09, 0.9);
                 this.game.stage.backgroundColor = 0xFFFFFF;
                 this.game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
                 this.game.tweens.frameBased = true;
                 this.graphics = this.game.add.graphics(0, 0);
                 this.waterMask = new Phaser.Graphics(this.game, 0, 0);
-                //this.avatarSpriteLoader = new Prefabs.AvatarSpriteLoader(this.game);
-                //this.avatarSpriteLoader.crossOrigin = "anonymous";
                 this.skillPillFactory = new WaterSkillGame.Prefabs.SkillPillFactory(this.game);
-                var skillPill = this.skillPillFactory.newInstance();
-                this.game.add.existing(skillPill);
-                this.water.setLevel(0.5);
                 this.game.stateLoadedCallback();
                 this.game.scale.onSizeChange.add(function () {
                     _this.water.setLevel();
@@ -667,7 +687,12 @@ var WaterSkillGame;
             MainState.prototype.setWaterLevel = function (level, delay) {
                 this.water.setLevel(level, delay);
             };
-            MainState.prototype.setItemsArray = function (array, maxItems) {
+            MainState.prototype.setItemsArray = function (array) {
+                var _this = this;
+                array.forEach(function (skillModel) {
+                    var skillPill = _this.skillPillFactory.newInstance(100, 100, skillModel.skill.name);
+                    _this.game.add.existing(skillPill);
+                });
                 //this.jackpotEntries = new Prefabs.JackpotEntries(this.game, array, maxItems, this.water, this.avatarSpriteLoader, this.avatarGroup);
                 //this.jackpotEntries.calculateAvatars();
                 //this.water.setLevel(this.jackpotEntries.calculateLevel());

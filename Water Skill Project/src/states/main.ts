@@ -12,6 +12,7 @@ module WaterSkillGame.States {
         private jackpotEntries: Prefabs.JackpotEntries;
         private buoyancyManager: Prefabs.BuoyancyManager;
         private skillPillFactory: Prefabs.SkillPillFactory;
+        private waterFactory: Prefabs.WaterFactory;
 
         private avatarGroup: Phaser.Group;
         private waterGroup: Phaser.Group;
@@ -27,7 +28,8 @@ module WaterSkillGame.States {
             this.winnerGroup = this.game.add.group();
 
             this.setUpPhysics();
-            this.water = new Prefabs.Water(this.game, 0);
+            this.waterFactory = new Prefabs.WaterFactory(this.game);
+            this.water = this.waterFactory.newInstance(0.5);
 
             this.buoyancyManager = new Prefabs.BuoyancyManager(0.09, 0.9);
 
@@ -39,10 +41,6 @@ module WaterSkillGame.States {
             this.waterMask = new Phaser.Graphics(this.game, 0, 0);
 
             this.skillPillFactory = new Prefabs.SkillPillFactory(this.game);
-            var skillPill = this.skillPillFactory.newInstance();
-            this.game.add.existing(skillPill);
-
-            this.water.setLevel(0.5);
             this.game.stateLoadedCallback();
 
             this.game.scale.onSizeChange.add(() => {
