@@ -62,9 +62,7 @@ function getImages() {
     });
 }
 
-/*var getImagesPromise = getImages().then(function () {
-    loaded = true;
-});*/
+var getImagesPromise;
 
 function requestImage(imageName) {
     var image = _.find(imageCache, function (image) {
@@ -80,11 +78,18 @@ function requestImage(imageName) {
 
 exports.getImageFromTerm = function (req, res) {
     if (loaded) {
-        requestImage(req.params.term).pipe(res);
-    } else {
-        getImages().then(function () {
-            loaded = true;
+        return requestImage(req.params.term).pipe(res);
+    }
+
+    if (getImagesPromise) {
+        getImagesPromise.then(function () {
             requestImage(req.params.term).pipe(res);
         });
+        return;
     }
+
+    getImagesPromise = getImages().then(function () {
+        loaded = true;
+        requestImage(req.params.term).pipe(res);
+    });
 };
