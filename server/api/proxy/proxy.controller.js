@@ -40,7 +40,7 @@ function getImages() {
                     }).then(function (images) {
                         console.log('found image: ' + skill.skill.name);
                         var image = images[0];
-                        image.name = skill.skill.name;
+                        image.name = skill.skill.name.replace('#', '');
                         imageCache.push(image);
                         resolve();
                     }, function (err) {
