@@ -70,7 +70,7 @@ function requestImage(imageName) {
     });
 
     if (!image) {
-        return null;
+        return undefined;
     }
 
     return request(image.url, function (err, response, body) {});
@@ -83,13 +83,23 @@ exports.getImageFromTerm = function (req, res) {
 
     if (getImagesPromise) {
         getImagesPromise.then(function () {
-            requestImage(req.params.term).pipe(res);
+            var request = requestImage(req.params.term);
+            if (request) {
+                request.pipe(res);
+            } else {
+                res.status(404).send();
+            }
         });
         return;
     }
 
     getImagesPromise = getImages().then(function () {
         loaded = true;
-        requestImage(req.params.term).pipe(res);
+        var request = requestImage(req.params.term);
+        if (request) {
+            request.pipe(res);
+        } else {
+            res.status(404).send();
+        }
     });
 };
