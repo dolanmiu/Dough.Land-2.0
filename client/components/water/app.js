@@ -1,3 +1,8 @@
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var WaterSkillGame;
 (function (WaterSkillGame) {
     var Game = (function () {
@@ -23,7 +28,7 @@ var WaterSkillGame;
             }
         };
         return Game;
-    })();
+    }());
     WaterSkillGame.Game = Game;
 })(WaterSkillGame || (WaterSkillGame = {}));
 var WaterSkillGame;
@@ -34,15 +39,10 @@ var WaterSkillGame;
             function SkillModel() {
             }
             return SkillModel;
-        })();
+        }());
         Models.SkillModel = SkillModel;
     })(Models = WaterSkillGame.Models || (WaterSkillGame.Models = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 var WaterSkillGame;
 (function (WaterSkillGame) {
     var Prefabs;
@@ -84,7 +84,7 @@ var WaterSkillGame;
                 return this.valueOfItems / this.totalPotValue;
             };
             return Avatar;
-        })(Phaser.Sprite);
+        }(Phaser.Sprite));
         Prefabs.Avatar = Avatar;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
@@ -134,7 +134,7 @@ var WaterSkillGame;
                 body.applyForce([0, this.liftForce.y], centerOfBuoyancy.x, centerOfBuoyancy.y);
             };
             return BuoyancyManager;
-        })();
+        }());
         Prefabs.BuoyancyManager = BuoyancyManager;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
@@ -230,8 +230,50 @@ var WaterSkillGame;
                 });
             };
             return JackpotEntries;
-        })();
+        }());
         Prefabs.JackpotEntries = JackpotEntries;
+    })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
+})(WaterSkillGame || (WaterSkillGame = {}));
+var WaterSkillGame;
+(function (WaterSkillGame) {
+    var Prefabs;
+    (function (Prefabs) {
+        var MouseDragHandler = (function (_super) {
+            __extends(MouseDragHandler, _super);
+            function MouseDragHandler(game) {
+                _super.call(this);
+                this.game = game;
+                this.sprites = [];
+                game.physics.p2.world.addBody(this);
+                game.input.onDown.add(this.click, this);
+                game.input.onUp.add(this.release, this);
+                game.input.addMoveCallback(this.move, this);
+            }
+            MouseDragHandler.prototype.click = function (pointer) {
+                var bodies = this.game.physics.p2.hitTest(pointer.position, this.sprites);
+                // p2 uses different coordinate system, so convert the pointer position to p2's coordinate system
+                var physicsPos = [this.game.physics.p2.pxmi(pointer.position.x), this.game.physics.p2.pxmi(pointer.position.y)];
+                if (bodies.length) {
+                    var clickedBody = bodies[0];
+                    var localPointInBody = [0, 0];
+                    // this function takes physicsPos and coverts it to the body's local coordinate system
+                    clickedBody.toLocalFrame(localPointInBody, physicsPos);
+                    // use a revoluteContraint to attach mouseBody to the clicked body
+                    this.mouseConstraint = this.game.physics.p2.createRevoluteConstraint(this, [0, 0], clickedBody, [this.game.physics.p2.mpxi(localPointInBody[0]), this.game.physics.p2.mpxi(localPointInBody[1])]);
+                }
+            };
+            MouseDragHandler.prototype.release = function () {
+                // remove constraint from object's body
+                this.game.physics.p2.removeConstraint(this.mouseConstraint);
+            };
+            MouseDragHandler.prototype.move = function (pointer) {
+                // p2 uses different coordinate system, so convert the pointer position to p2's coordinate system
+                this.position[0] = this.game.physics.p2.pxmi(pointer.position.x);
+                this.position[1] = this.game.physics.p2.pxmi(pointer.position.y);
+            };
+            return MouseDragHandler;
+        }(p2.Body));
+        Prefabs.MouseDragHandler = MouseDragHandler;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
 var WaterSkillGame;
@@ -251,7 +293,7 @@ var WaterSkillGame;
                 this.start();
             };
             return ProxyImageLoader;
-        })(Phaser.Loader);
+        }(Phaser.Loader));
         Prefabs.ProxyImageLoader = ProxyImageLoader;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
@@ -261,22 +303,27 @@ var WaterSkillGame;
     (function (Prefabs) {
         var SkillPill = (function (_super) {
             __extends(SkillPill, _super);
-            function SkillPill(game, x, y) {
+            function SkillPill(game, x, y, buoyancyManager) {
                 _super.call(this, game, x, y);
+                this.buoyancyManager = buoyancyManager;
                 this.game.physics.p2.enable(this);
                 //this.water = water;
                 this.body.angularVelocity = (Math.random() * 8) - 4;
-                var text = this.game.add.text(0, 0, "MyText", { font: '14px Raleway', align: 'center' });
+                this.body.debug = true;
+                /*var text = this.game.add.text(0, 0, "MyText", { font: '14px Raleway', align: 'center' });
                 text.anchor.setTo(0.5);
                 text.setShadow(5, 5, 'rgba(0,0,0,0.5)', 5);
-                //var textSprite = this.add.sprite(this.world.centerX - 100, this.world.centerY - 200, null); 
+                //var textSprite = this.add.sprite(this.world.centerX - 100, this.world.centerY - 200, null);
                 this.addChild(text);
-                //this.physics.enable(textSprite, Phaser.Physics.ARCADE); 
+                //this.physics.enable(textSprite, Phaser.Physics.ARCADE);
                 /*textSprite.body.bounce.y = 1;
                 textSprite.body.gravity.y = 2000;
                 textSprite.body.collideWorldBounds = true;*/
             }
-            SkillPill.prototype.update = function () {
+            SkillPill.prototype.update = function (point) {
+                if (point) {
+                    this.buoyancyManager.applyAABBBuoyancyForces(this.body, point);
+                }
                 /*var velocity = [];
                 this.body.getVelocityAtPoint(velocity, [0, 0]);
                 var velocityVector = new Phaser.Point(velocity[0], velocity[1]);
@@ -289,7 +336,7 @@ var WaterSkillGame;
                 this.body.angularVelocity *= 0.99;*/
             };
             return SkillPill;
-        })(Phaser.Sprite);
+        }(Phaser.Sprite));
         Prefabs.SkillPill = SkillPill;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
@@ -302,15 +349,19 @@ var WaterSkillGame;
                 this.game = game;
                 this.imageLoader = new Prefabs.ProxyImageLoader(game);
             }
-            SkillPillFactory.prototype.newInstance = function (x, y, term) {
-                var skillPill = new Prefabs.SkillPill(this.game, x, y);
+            SkillPillFactory.prototype.newInstance = function (x, y, term, size) {
+                var buoyancyManager = new Prefabs.BuoyancyManager(0.09, 0.9);
+                var skillPill = new Prefabs.SkillPill(this.game, x, y, buoyancyManager);
                 this.imageLoader.load(term, function (key) {
                     skillPill.loadTexture(key);
+                    skillPill.scale.setTo(size / skillPill.width);
+                    skillPill.body.setRectangleFromSprite(skillPill);
+                    console.log(skillPill.width);
                 });
                 return skillPill;
             };
             return SkillPillFactory;
-        })();
+        }());
         Prefabs.SkillPillFactory = SkillPillFactory;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
@@ -362,7 +413,7 @@ var WaterSkillGame;
                 this.waterSlotText.setText(text);
             };
             return PriceText;
-        })();
+        }());
         Prefabs.PriceText = PriceText;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
@@ -421,7 +472,7 @@ var WaterSkillGame;
                 return minutes.substr(-2) + ":" + seconds.substr(-2);
             };
             return TimerText;
-        })();
+        }());
         Prefabs.TimerText = TimerText;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
@@ -455,7 +506,7 @@ var WaterSkillGame;
                 this.text = '';
             };
             return WinnerText;
-        })(Phaser.Text);
+        }(Phaser.Text));
         Prefabs.WinnerText = WinnerText;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
@@ -555,7 +606,7 @@ var WaterSkillGame;
                 return new Phaser.Point(0, this.waterPoints[index].y);
             };
             return Water;
-        })(Phaser.Polygon);
+        }(Phaser.Polygon));
         Prefabs.Water = Water;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
@@ -601,7 +652,7 @@ var WaterSkillGame;
                 }*/
             };
             return WaterPoint;
-        })(Phaser.Point);
+        }(Phaser.Point));
         Prefabs.WaterPoint = WaterPoint;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
@@ -635,7 +686,7 @@ var WaterSkillGame;
                 return waterPoints;
             };
             return WaterFactory;
-        })();
+        }());
         Prefabs.WaterFactory = WaterFactory;
     })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));
@@ -647,6 +698,7 @@ var WaterSkillGame;
             __extends(MainState, _super);
             function MainState() {
                 _super.call(this);
+                this.skillPills = new Array();
             }
             MainState.prototype.create = function () {
                 var _this = this;
@@ -654,30 +706,32 @@ var WaterSkillGame;
                 this.waterGroup = this.game.add.group();
                 this.winnerGroup = this.game.add.group();
                 this.setUpPhysics();
-                this.waterFactory = new WaterSkillGame.Prefabs.WaterFactory(this.game);
-                this.water = this.waterFactory.newInstance(0.5);
-                this.buoyancyManager = new WaterSkillGame.Prefabs.BuoyancyManager(0.09, 0.9);
-                this.game.stage.backgroundColor = 0xFFFFFF;
+                var waterFactory = new WaterSkillGame.Prefabs.WaterFactory(this.game);
+                this.water = waterFactory.newInstance(0.5);
+                //this.game.stage.backgroundColor = 0xFFFFFF;
+                this.game.stage.backgroundColor = 0xF5F5F5;
                 this.game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
                 this.game.tweens.frameBased = true;
                 this.graphics = this.game.add.graphics(0, 0);
                 this.waterMask = new Phaser.Graphics(this.game, 0, 0);
                 this.skillPillFactory = new WaterSkillGame.Prefabs.SkillPillFactory(this.game);
-                this.game.stateLoadedCallback();
                 this.game.scale.onSizeChange.add(function () {
                     _this.water.setLevel();
                 });
+                this.mouseDragHandler = new WaterSkillGame.Prefabs.MouseDragHandler(this.game);
                 //this.waterGroup.add(this.priceText);
+                this.game.stateLoadedCallback();
             };
             MainState.prototype.update = function () {
+                var _this = this;
                 this.waterMask.clear();
                 this.graphics.clear();
                 this.water.update(this.graphics, this.waterMask);
                 this.graphics.endFill();
                 this.waterMask.endFill();
-                /*this.jackpotEntries.forEachAvatar(avatar => {
-                    this.buoyancyManager.applyAABBBuoyancyForces(avatar.body, this.water.getWaterLevel(avatar.position.x));
-                });*/
+                this.skillPills.forEach(function (skillPill) {
+                    skillPill.update(_this.water.getWaterLevel(skillPill.position.x));
+                });
             };
             MainState.prototype.setUpPhysics = function () {
                 this.game.physics.startSystem(Phaser.Physics.P2JS);
@@ -690,15 +744,17 @@ var WaterSkillGame;
             MainState.prototype.setItemsArray = function (array) {
                 var _this = this;
                 array.forEach(function (skillModel) {
-                    var skillPill = _this.skillPillFactory.newInstance(100, 100, skillModel.skill.name);
+                    var skillPill = _this.skillPillFactory.newInstance(100, 100, skillModel.skill.name, 100);
                     _this.game.add.existing(skillPill);
+                    _this.mouseDragHandler.sprites.push(skillPill);
+                    _this.skillPills.push(skillPill);
                 });
                 //this.jackpotEntries = new Prefabs.JackpotEntries(this.game, array, maxItems, this.water, this.avatarSpriteLoader, this.avatarGroup);
                 //this.jackpotEntries.calculateAvatars();
                 //this.water.setLevel(this.jackpotEntries.calculateLevel());
             };
             return MainState;
-        })(Phaser.State);
+        }(Phaser.State));
         States.MainState = MainState;
     })(States = WaterSkillGame.States || (WaterSkillGame.States = {}));
 })(WaterSkillGame || (WaterSkillGame = {}));

@@ -9,10 +9,14 @@ module WaterSkillGame.Prefabs {
             this.imageLoader = new ProxyImageLoader(game);
         }
 
-        newInstance(x: number, y: number, term: string): SkillPill {
-            var skillPill = new SkillPill(this.game, x, y);
+        newInstance(x: number, y: number, term: string, size: number): SkillPill {
+            var buoyancyManager = new Prefabs.BuoyancyManager(0.09, 0.9);
+            var skillPill = new SkillPill(this.game, x, y, buoyancyManager);
             this.imageLoader.load(term, (key) => {
                 skillPill.loadTexture(key);
+                skillPill.scale.setTo(size / skillPill.width);
+                skillPill.body.setRectangleFromSprite(skillPill);
+                console.log(skillPill.width);
             });
             return skillPill;
         }

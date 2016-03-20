@@ -196,16 +196,18 @@
         </div>
     </section>
 
-    <section id="skills" class="dark">
-        <div ng-controller="waterGameController">
-            <div id="water"></div>
-        </div>
-        <div class="container" ng-controller="ChartController">
+    <section id="skills" class="water">
+        <div class="container">
             <div class="row">
                 <div class="col-xs-12">
                     <h1>Skills</h1>
                 </div>
             </div>
+        </div>
+        <div ng-controller="waterGameController">
+            <div id="water" style="height: 1000px"></div>
+        </div>
+        <!--<div class="container" ng-controller="ChartController">
             <div class="row">
                 <div class="col-md-6">
                     <div class="btn-group btn-spacing" ng-repeat="skill in profile.skills.values">
@@ -221,7 +223,7 @@
                     <pie-chart data="data" options="options"></pie-chart>
                 </div>
             </div>
-        </div>
+        </div>-->
     </section>
 
     <section id="portfolio">

@@ -21,6 +21,7 @@ function getImages() {
                 skills = linkedin.skills.values;
 
             console.log(skills);
+            skills = skills.slice(0, 4);
 
             skills.forEach(function (skill) {
                 var promise = new Promise(function (resolve, reject) {
@@ -78,7 +79,13 @@ function requestImage(imageName) {
 
 exports.getImageFromTerm = function (req, res) {
     if (loaded) {
-        return requestImage(req.params.term).pipe(res);
+        var request = requestImage(req.params.term);
+        if (request) {
+            request.pipe(res);
+        } else {
+            res.status(404).send();
+        }
+        return;
     }
 
     if (getImagesPromise) {

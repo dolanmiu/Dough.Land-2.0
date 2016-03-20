@@ -3,15 +3,18 @@ module WaterSkillGame.Prefabs {
 
         private water: Water;
         private splashed: boolean;
+        private buoyancyManager: BuoyancyManager;
 
-        constructor(game: Phaser.Game, x: number, y: number) {
+        constructor(game: Phaser.Game, x: number, y: number, buoyancyManager: BuoyancyManager) {
             super(game, x, y);
-            
+
+            this.buoyancyManager = buoyancyManager;
             this.game.physics.p2.enable(this);
             //this.water = water;
             this.body.angularVelocity = (Math.random() * 8) - 4;
+            this.body.debug = true;
 
-            var text = this.game.add.text(0, 0, "MyText", { font: '14px Raleway', align: 'center' }); 
+            /*var text = this.game.add.text(0, 0, "MyText", { font: '14px Raleway', align: 'center' }); 
             text.anchor.setTo(0.5); 
             text.setShadow(5, 5, 'rgba(0,0,0,0.5)', 5); 
             //var textSprite = this.add.sprite(this.world.centerX - 100, this.world.centerY - 200, null); 
@@ -22,7 +25,10 @@ module WaterSkillGame.Prefabs {
             textSprite.body.collideWorldBounds = true;*/
         }
 
-        update() {
+        update(point: Phaser.Point) {
+            if (point) {
+                this.buoyancyManager.applyAABBBuoyancyForces(this.body, point);
+            }
             /*var velocity = [];
             this.body.getVelocityAtPoint(velocity, [0, 0]);
             var velocityVector = new Phaser.Point(velocity[0], velocity[1]);
