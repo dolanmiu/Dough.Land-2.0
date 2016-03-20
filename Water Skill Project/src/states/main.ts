@@ -9,7 +9,6 @@ module WaterSkillGame.States {
         private graphics: Phaser.Graphics;
         private waterMask: Phaser.Graphics;
         private water: Prefabs.Water;
-        private jackpotEntries: Prefabs.JackpotEntries;
         private skillPillFactory: Prefabs.SkillPillFactory;
         private mouseDragHandler: Prefabs.MouseDragHandler;
         private skillPills: Array<Prefabs.SkillPill>;
@@ -61,7 +60,7 @@ module WaterSkillGame.States {
             this.waterMask.endFill();
 
             this.skillPills.forEach(skillPill => {
-                skillPill.update(this.water.getWaterLevel(skillPill.position.x));
+                skillPill.updatePhysics(this.water.getWaterLevel(skillPill.position.x));
             });
         }
 
@@ -82,8 +81,6 @@ module WaterSkillGame.States {
                 this.mouseDragHandler.sprites.push(skillPill);
                 this.skillPills.push(skillPill);
             });
-            //this.jackpotEntries = new Prefabs.JackpotEntries(this.game, array, maxItems, this.water, this.avatarSpriteLoader, this.avatarGroup);
-            //this.jackpotEntries.calculateAvatars();
             //this.water.setLevel(this.jackpotEntries.calculateLevel());
         }
     }

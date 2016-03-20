@@ -47,197 +47,6 @@ var WaterSkillGame;
 (function (WaterSkillGame) {
     var Prefabs;
     (function (Prefabs) {
-        var Avatar = (function (_super) {
-            __extends(Avatar, _super);
-            function Avatar(game, x, y, water, totalPotValue, count) {
-                _super.call(this, game, x, y);
-                game.add.existing(this);
-                this.valueOfItems = count || 1;
-                this.totalPotValue = totalPotValue;
-                var scale = this.calculateCurrentScale();
-                this.scale.x = scale;
-                this.scale.y = scale;
-                this.game.physics.p2.enable(this);
-                this.water = water;
-                this.body.angularVelocity = (Math.random() * 8) - 4;
-            }
-            Avatar.prototype.autoScale = function (speed) {
-                if (_.isUndefined(speed)) {
-                    speed = 500;
-                }
-                var scale = this.calculateCurrentScale();
-                this.game.add.tween(this.scale).to({ x: scale, y: scale }, speed, Phaser.Easing.Linear.None, true);
-            };
-            Avatar.prototype.update = function () {
-                var velocity = [];
-                this.body.getVelocityAtPoint(velocity, [0, 0]);
-                var velocityVector = new Phaser.Point(velocity[0], velocity[1]);
-                if (this.position.y > this.water.getWaterLevel(this.position.x).y) {
-                    if (!this.splashed) {
-                        this.water.splash(this.position.x, velocityVector.getMagnitude() * 3);
-                        this.splashed = true;
-                    }
-                }
-                this.body.angularVelocity *= 0.99;
-            };
-            Avatar.prototype.calculateCurrentScale = function () {
-                return this.valueOfItems / this.totalPotValue;
-            };
-            return Avatar;
-        }(Phaser.Sprite));
-        Prefabs.Avatar = Avatar;
-    })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
-})(WaterSkillGame || (WaterSkillGame = {}));
-var WaterSkillGame;
-(function (WaterSkillGame) {
-    var Prefabs;
-    (function (Prefabs) {
-        var BuoyancyManager = (function () {
-            function BuoyancyManager(k, c) {
-                this.liftForce = new Phaser.Point();
-                this.k = 100; // up force per submerged "volume"
-                this.c = 0.8; // viscosity
-                this.v = [0, 0];
-                this.k = k;
-                this.c = c;
-            }
-            BuoyancyManager.prototype.applyAABBBuoyancyForces = function (body, planePosition) {
-                var centerOfBuoyancy = new Phaser.Point();
-                // Get shape AABB
-                var bounds = body.sprite.getBounds();
-                var areaUnderWater;
-                if (bounds.y > planePosition.y) {
-                    // Fully submerged
-                    centerOfBuoyancy = body.sprite.position;
-                    areaUnderWater = bounds.height * bounds.width;
-                }
-                else if (bounds.y + bounds.height > planePosition.y) {
-                    // Partially submerged
-                    var width = bounds.width;
-                    var height = Math.abs(bounds.y - planePosition.y);
-                    //areaUnderWater = width * height;
-                    areaUnderWater = bounds.height * bounds.width;
-                    centerOfBuoyancy = body.sprite.position;
-                }
-                else {
-                    return;
-                }
-                // Compute lift force
-                this.liftForce = Phaser.Point.subtract(centerOfBuoyancy, planePosition);
-                this.liftForce.setMagnitude(areaUnderWater * this.k);
-                // Make center of bouycancy relative to the body
-                centerOfBuoyancy = Phaser.Point.subtract(centerOfBuoyancy, body.sprite.position);
-                // Apply forces
-                body.velocity.x = body.velocity.x * this.c;
-                body.velocity.y = body.velocity.y * this.c;
-                //body.applyForce([this.viscousForce.x, this.viscousForce.y], centerOfBuoyancy.x, centerOfBuoyancy.y);
-                body.applyForce([0, this.liftForce.y], centerOfBuoyancy.x, centerOfBuoyancy.y);
-            };
-            return BuoyancyManager;
-        }());
-        Prefabs.BuoyancyManager = BuoyancyManager;
-    })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
-})(WaterSkillGame || (WaterSkillGame = {}));
-var WaterSkillGame;
-(function (WaterSkillGame) {
-    var Prefabs;
-    (function (Prefabs) {
-        var JackpotEntries = (function () {
-            function JackpotEntries(game, array, maxItems, water, avatarSpriteLoader, avatarGroup) {
-                this.referenceArray = array;
-                this.maxItems = maxItems;
-                this.avatarDictionary = {};
-                this.game = game;
-                this.water = water;
-                this.avatarSpriteLoader = avatarSpriteLoader;
-                this.avatarGroup = avatarGroup;
-            }
-            JackpotEntries.prototype.update = function () {
-                _.forEach(this.avatarDictionary, function (avatar) {
-                    avatar.update();
-                });
-            };
-            JackpotEntries.prototype.checkChanged = function () {
-                if (this.currentArray == undefined || this.currentArray.length != this.referenceArray.length) {
-                    this.currentArray = _.cloneDeep(this.referenceArray);
-                    return true;
-                }
-                return false;
-            };
-            JackpotEntries.prototype.calculateLevel = function () {
-                return this.referenceArray.length / this.maxItems;
-            };
-            JackpotEntries.prototype.calculateTotalPrice = function () {
-                var sum = 0;
-                this.referenceArray.forEach(function (entry) {
-                    sum += entry.item.price.value;
-                });
-                return sum;
-            };
-            JackpotEntries.prototype.clear = function () {
-                _.forEach(this.avatarDictionary, function (avatar) {
-                    avatar.kill();
-                });
-                this.avatarDictionary = {};
-            };
-            JackpotEntries.prototype.createAvatarCountDictionary = function () {
-                var dictionary = {};
-                this.referenceArray.forEach(function (entry) {
-                    var id = entry.user._id || entry.user;
-                    if (dictionary[id]) {
-                        dictionary[id] += entry.item.price.value;
-                    }
-                    else {
-                        dictionary[id] = entry.item.price.value;
-                    }
-                });
-                return dictionary;
-            };
-            JackpotEntries.prototype.calculateAvatars = function () {
-                var _this = this;
-                _.forEach(this.avatarDictionary, function (avatar) {
-                    avatar.valueOfItems = 0;
-                });
-                var countDictionary = this.createAvatarCountDictionary();
-                _.forEach(countDictionary, function (value, key) {
-                    var avatar = _this.avatarDictionary[key];
-                    if (avatar) {
-                        avatar.valueOfItems = value;
-                        avatar.totalPotValue = _this.calculateTotalPrice();
-                    }
-                    else {
-                        _this.loadAvatar(key, value);
-                    }
-                });
-                _.forEach(this.avatarDictionary, function (avatar) {
-                    avatar.autoScale();
-                });
-            };
-            JackpotEntries.prototype.forEachAvatar = function (lambda) {
-                _.forEach(this.avatarDictionary, lambda);
-            };
-            JackpotEntries.prototype.getCount = function () {
-                return this.referenceArray.length;
-            };
-            JackpotEntries.prototype.loadAvatar = function (key, value) {
-                var avatar = new Prefabs.Avatar(this.game, Math.random() * (this.game.width - 150), 100, this.water, this.calculateTotalPrice(), value);
-                this.avatarDictionary[key] = avatar;
-                this.game.physics.enable([avatar], Phaser.Physics.ARCADE);
-                avatar.body.collideWorldBounds = true;
-                //this.avatarGroup.add(avatar);
-                this.avatarSpriteLoader.loadAvatar(key, function () {
-                    avatar.loadTexture(key);
-                });
-            };
-            return JackpotEntries;
-        }());
-        Prefabs.JackpotEntries = JackpotEntries;
-    })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
-})(WaterSkillGame || (WaterSkillGame = {}));
-var WaterSkillGame;
-(function (WaterSkillGame) {
-    var Prefabs;
-    (function (Prefabs) {
         var MouseDragHandler = (function (_super) {
             __extends(MouseDragHandler, _super);
             function MouseDragHandler(game) {
@@ -301,6 +110,56 @@ var WaterSkillGame;
 (function (WaterSkillGame) {
     var Prefabs;
     (function (Prefabs) {
+        var BuoyancyManager = (function () {
+            function BuoyancyManager(k, c) {
+                this.liftForce = new Phaser.Point();
+                this.k = 100; // up force per submerged "volume"
+                this.c = 0.8; // viscosity
+                this.v = [0, 0];
+                this.k = k;
+                this.c = c;
+            }
+            BuoyancyManager.prototype.applyAABBBuoyancyForces = function (body, planePosition) {
+                var centerOfBuoyancy = new Phaser.Point();
+                // Get shape AABB
+                var bounds = body.sprite.getBounds();
+                var areaUnderWater;
+                if (bounds.y > planePosition.y) {
+                    // Fully submerged
+                    centerOfBuoyancy = body.sprite.position;
+                    areaUnderWater = bounds.height * bounds.width;
+                }
+                else if (bounds.y + bounds.height > planePosition.y) {
+                    // Partially submerged
+                    var width = bounds.width;
+                    var height = Math.abs(bounds.y - planePosition.y);
+                    //areaUnderWater = width * height;
+                    areaUnderWater = bounds.height * bounds.width;
+                    centerOfBuoyancy = body.sprite.position;
+                }
+                else {
+                    return;
+                }
+                // Compute lift force
+                this.liftForce = Phaser.Point.subtract(centerOfBuoyancy, planePosition);
+                this.liftForce.setMagnitude(areaUnderWater * this.k);
+                // Make center of bouycancy relative to the body
+                centerOfBuoyancy = Phaser.Point.subtract(centerOfBuoyancy, body.sprite.position);
+                // Apply forces
+                body.velocity.x = body.velocity.x * this.c;
+                body.velocity.y = body.velocity.y * this.c;
+                //body.applyForce([this.viscousForce.x, this.viscousForce.y], centerOfBuoyancy.x, centerOfBuoyancy.y);
+                body.applyForce([0, this.liftForce.y], centerOfBuoyancy.x, centerOfBuoyancy.y);
+            };
+            return BuoyancyManager;
+        }());
+        Prefabs.BuoyancyManager = BuoyancyManager;
+    })(Prefabs = WaterSkillGame.Prefabs || (WaterSkillGame.Prefabs = {}));
+})(WaterSkillGame || (WaterSkillGame = {}));
+var WaterSkillGame;
+(function (WaterSkillGame) {
+    var Prefabs;
+    (function (Prefabs) {
         var SkillPill = (function (_super) {
             __extends(SkillPill, _super);
             function SkillPill(game, x, y, buoyancyManager) {
@@ -320,7 +179,7 @@ var WaterSkillGame;
                 textSprite.body.gravity.y = 2000;
                 textSprite.body.collideWorldBounds = true;*/
             }
-            SkillPill.prototype.update = function (point) {
+            SkillPill.prototype.updatePhysics = function (point) {
                 if (point) {
                     this.buoyancyManager.applyAABBBuoyancyForces(this.body, point);
                 }
@@ -730,7 +589,7 @@ var WaterSkillGame;
                 this.graphics.endFill();
                 this.waterMask.endFill();
                 this.skillPills.forEach(function (skillPill) {
-                    skillPill.update(_this.water.getWaterLevel(skillPill.position.x));
+                    skillPill.updatePhysics(_this.water.getWaterLevel(skillPill.position.x));
                 });
             };
             MainState.prototype.setUpPhysics = function () {
@@ -749,8 +608,6 @@ var WaterSkillGame;
                     _this.mouseDragHandler.sprites.push(skillPill);
                     _this.skillPills.push(skillPill);
                 });
-                //this.jackpotEntries = new Prefabs.JackpotEntries(this.game, array, maxItems, this.water, this.avatarSpriteLoader, this.avatarGroup);
-                //this.jackpotEntries.calculateAvatars();
                 //this.water.setLevel(this.jackpotEntries.calculateLevel());
             };
             return MainState;

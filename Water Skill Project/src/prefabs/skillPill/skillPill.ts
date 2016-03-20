@@ -25,7 +25,7 @@ module WaterSkillGame.Prefabs {
             textSprite.body.collideWorldBounds = true;*/
         }
 
-        update(point: Phaser.Point) {
+        updatePhysics(point: Phaser.Point) {
             if (point) {
                 this.buoyancyManager.applyAABBBuoyancyForces(this.body, point);
             }
