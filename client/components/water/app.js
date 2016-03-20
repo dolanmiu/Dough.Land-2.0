@@ -130,29 +130,36 @@ var WaterSkillGame;
                 if (bounds.y > planePosition.y) {
                     // Fully submerged
                     centerOfBuoyancy = body.sprite.position;
-                    areaUnderWater = bounds.height * bounds.width;
+                    areaUnderWater = body.sprite.width * body.sprite.height;
                 }
                 else if (bounds.y + bounds.height > planePosition.y) {
                     // Partially submerged
                     var width = bounds.width;
                     var height = Math.abs(bounds.y - planePosition.y);
                     //areaUnderWater = width * height;
-                    areaUnderWater = bounds.height * bounds.width;
+                    areaUnderWater = body.sprite.width * body.sprite.height;
                     centerOfBuoyancy = body.sprite.position;
                 }
                 else {
+                    body.angularDamping = 0.1;
                     return;
                 }
                 // Compute lift force
                 this.liftForce = Phaser.Point.subtract(centerOfBuoyancy, planePosition);
-                this.liftForce.setMagnitude(areaUnderWater * this.k);
+                //console.log(this.liftForce.y);
+                //console.log(areaUnderWater);
+                //this.liftForce.setMagnitude(areaUnderWater * this.k);
                 // Make center of bouycancy relative to the body
                 centerOfBuoyancy = Phaser.Point.subtract(centerOfBuoyancy, body.sprite.position);
                 // Apply forces
                 body.velocity.x = body.velocity.x * this.c;
                 body.velocity.y = body.velocity.y * this.c;
+                body.angularDamping = 0.9;
                 //body.applyForce([this.viscousForce.x, this.viscousForce.y], centerOfBuoyancy.x, centerOfBuoyancy.y);
-                body.applyForce([0, this.liftForce.y], centerOfBuoyancy.x, centerOfBuoyancy.y);
+                //console.log(areaUnderWater);
+                if (this.liftForce.y > 0) {
+                    body.applyForce([0, this.liftForce.y], centerOfBuoyancy.x, centerOfBuoyancy.y);
+                }
             };
             return BuoyancyManager;
         }());
@@ -188,9 +195,10 @@ var WaterSkillGame;
                     this.buoyancyManager.applyAABBBuoyancyForces(this.body, point);
                 }
                 if (this.y > this.game.height / 2 && !this.inWater) {
-                    console.log('splash');
                     water.splash(this.x, this.body.velocity.y / 10);
-                    console.log(this.body.velocity.y);
+                }
+                if (this.y < this.game.height / 2 && this.inWater) {
+                    water.splash(this.x, this.body.velocity.y / 10);
                 }
                 if (this.y > this.game.height / 2) {
                     this.inWater = true;
@@ -431,7 +439,7 @@ var WaterSkillGame;
                 }
                 this.fixWaterPositions();
                 graphicsCollection.forEach(function (graphics) {
-                    graphics.beginFill(0x4da6ff);
+                    graphics.beginFill(0x4da6ff, 0.5);
                     _this.points = _this.waterPoints;
                     graphics.drawPolygon(_this.points);
                 });
@@ -575,33 +583,30 @@ var WaterSkillGame;
             }
             MainState.prototype.create = function () {
                 var _this = this;
-                this.avatarGroup = this.game.add.group();
-                this.waterGroup = this.game.add.group();
-                this.winnerGroup = this.game.add.group();
+                this.skillPillGroup = new Phaser.Group(this.game);
+                this.waterGroup = new Phaser.Group(this.game);
+                this.waterGroup.z = 10;
+                this.skillPillGroup.z = 1;
                 this.setUpPhysics();
                 var waterFactory = new WaterSkillGame.Prefabs.WaterFactory(this.game);
                 this.water = waterFactory.newInstance(0.5);
-                //this.game.stage.backgroundColor = 0xFFFFFF;
+                //this.waterGroup.add(this.water);
                 this.game.stage.backgroundColor = 0xF5F5F5;
                 this.game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
                 this.game.tweens.frameBased = true;
                 this.graphics = this.game.add.graphics(0, 0);
-                this.waterMask = new Phaser.Graphics(this.game, 0, 0);
                 this.skillPillFactory = new WaterSkillGame.Prefabs.SkillPillFactory(this.game);
                 this.game.scale.onSizeChange.add(function () {
                     _this.water.setLevel();
                 });
                 this.mouseDragHandler = new WaterSkillGame.Prefabs.MouseDragHandler(this.game);
-                //this.waterGroup.add(this.priceText);
                 this.game.stateLoadedCallback();
             };
             MainState.prototype.update = function () {
                 var _this = this;
-                this.waterMask.clear();
                 this.graphics.clear();
-                this.water.update(this.graphics, this.waterMask);
+                this.water.update(this.graphics);
                 this.graphics.endFill();
-                this.waterMask.endFill();
                 this.skillPills.forEach(function (skillPill) {
                     skillPill.updatePhysics(_this.water.getWaterLevel(skillPill.position.x), _this.water);
                 });
@@ -622,8 +627,8 @@ var WaterSkillGame;
                     _this.game.add.existing(skillPill);
                     _this.mouseDragHandler.sprites.push(skillPill);
                     _this.skillPills.push(skillPill);
+                    _this.skillPillGroup.add(skillPill);
                 });
-                //this.water.setLevel(this.jackpotEntries.calculateLevel());
             };
             return MainState;
         }(Phaser.State));

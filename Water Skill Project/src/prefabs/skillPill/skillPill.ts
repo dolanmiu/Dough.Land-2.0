@@ -32,11 +32,13 @@ module WaterSkillGame.Prefabs {
             }
 
             if (this.y > this.game.height / 2 && !this.inWater) {
-                console.log('splash');
                 water.splash(this.x, this.body.velocity.y / 10);
-                console.log(this.body.velocity.y);
             }
-            
+
+            if (this.y < this.game.height / 2 && this.inWater) {
+                water.splash(this.x, this.body.velocity.y / 10);
+            }
+
             if (this.y > this.game.height / 2) {
                 this.inWater = true;
             } else {

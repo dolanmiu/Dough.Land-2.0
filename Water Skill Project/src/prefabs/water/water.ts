@@ -52,7 +52,7 @@ module WaterSkillGame.Prefabs {
             this.fixWaterPositions();
 
             graphicsCollection.forEach(graphics => {
-                graphics.beginFill(0x4da6ff);
+                graphics.beginFill(0x4da6ff, 0.5);
                 this.points = this.waterPoints;
                 graphics.drawPolygon(this.points);
             });
