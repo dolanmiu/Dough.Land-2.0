@@ -94,8 +94,11 @@ var WaterSkillGame;
             function ProxyImageLoader(game) {
                 _super.call(this, game);
             }
+            ProxyImageLoader.prototype.normaliseKey = function (key) {
+                return key.replace('#', 'sharp');
+            };
             ProxyImageLoader.prototype.load = function (key, callback) {
-                this.image(key, '/api/proxy/images/' + key, false);
+                this.image(key, '/api/proxy/images/' + this.normaliseKey(key), false);
                 this.onLoadComplete.addOnce(function () {
                     callback(key);
                 });
@@ -164,11 +167,12 @@ var WaterSkillGame;
             __extends(SkillPill, _super);
             function SkillPill(game, x, y, buoyancyManager) {
                 _super.call(this, game, x, y);
+                this.inWater = false;
                 this.buoyancyManager = buoyancyManager;
                 this.game.physics.p2.enable(this);
                 //this.water = water;
                 this.body.angularVelocity = (Math.random() * 8) - 4;
-                this.body.debug = true;
+                //this.body.debug = true;
                 /*var text = this.game.add.text(0, 0, "MyText", { font: '14px Raleway', align: 'center' });
                 text.anchor.setTo(0.5);
                 text.setShadow(5, 5, 'rgba(0,0,0,0.5)', 5);
@@ -179,9 +183,20 @@ var WaterSkillGame;
                 textSprite.body.gravity.y = 2000;
                 textSprite.body.collideWorldBounds = true;*/
             }
-            SkillPill.prototype.updatePhysics = function (point) {
+            SkillPill.prototype.updatePhysics = function (point, water) {
                 if (point) {
                     this.buoyancyManager.applyAABBBuoyancyForces(this.body, point);
+                }
+                if (this.y > this.game.height / 2 && !this.inWater) {
+                    console.log('splash');
+                    water.splash(this.x, this.body.velocity.y / 10);
+                    console.log(this.body.velocity.y);
+                }
+                if (this.y > this.game.height / 2) {
+                    this.inWater = true;
+                }
+                else {
+                    this.inWater = false;
                 }
                 /*var velocity = [];
                 this.body.getVelocityAtPoint(velocity, [0, 0]);
@@ -209,13 +224,12 @@ var WaterSkillGame;
                 this.imageLoader = new Prefabs.ProxyImageLoader(game);
             }
             SkillPillFactory.prototype.newInstance = function (x, y, term, size) {
-                var buoyancyManager = new Prefabs.BuoyancyManager(0.09, 0.9);
+                var buoyancyManager = new Prefabs.BuoyancyManager(0.04, 0.9);
                 var skillPill = new Prefabs.SkillPill(this.game, x, y, buoyancyManager);
                 this.imageLoader.load(term, function (key) {
                     skillPill.loadTexture(key);
                     skillPill.scale.setTo(size / skillPill.width);
                     skillPill.body.setRectangleFromSprite(skillPill);
-                    console.log(skillPill.width);
                 });
                 return skillPill;
             };
@@ -589,7 +603,7 @@ var WaterSkillGame;
                 this.graphics.endFill();
                 this.waterMask.endFill();
                 this.skillPills.forEach(function (skillPill) {
-                    skillPill.updatePhysics(_this.water.getWaterLevel(skillPill.position.x));
+                    skillPill.updatePhysics(_this.water.getWaterLevel(skillPill.position.x), _this.water);
                 });
             };
             MainState.prototype.setUpPhysics = function () {
@@ -602,6 +616,7 @@ var WaterSkillGame;
             };
             MainState.prototype.setItemsArray = function (array) {
                 var _this = this;
+                array = array.slice(0, 1);
                 array.forEach(function (skillModel) {
                     var skillPill = _this.skillPillFactory.newInstance(100, 100, skillModel.skill.name, 100);
                     _this.game.add.existing(skillPill);

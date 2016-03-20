@@ -2,17 +2,18 @@ module WaterSkillGame.Prefabs {
     export class SkillPill extends Phaser.Sprite {
 
         private water: Water;
-        private splashed: boolean;
+        private inWater: boolean;
         private buoyancyManager: BuoyancyManager;
 
         constructor(game: Phaser.Game, x: number, y: number, buoyancyManager: BuoyancyManager) {
             super(game, x, y);
 
+            this.inWater = false;
             this.buoyancyManager = buoyancyManager;
             this.game.physics.p2.enable(this);
             //this.water = water;
             this.body.angularVelocity = (Math.random() * 8) - 4;
-            this.body.debug = true;
+            //this.body.debug = true;
 
             /*var text = this.game.add.text(0, 0, "MyText", { font: '14px Raleway', align: 'center' }); 
             text.anchor.setTo(0.5); 
@@ -25,9 +26,21 @@ module WaterSkillGame.Prefabs {
             textSprite.body.collideWorldBounds = true;*/
         }
 
-        updatePhysics(point: Phaser.Point) {
+        updatePhysics(point: Phaser.Point, water: Water) {
             if (point) {
                 this.buoyancyManager.applyAABBBuoyancyForces(this.body, point);
+            }
+
+            if (this.y > this.game.height / 2 && !this.inWater) {
+                console.log('splash');
+                water.splash(this.x, this.body.velocity.y / 10);
+                console.log(this.body.velocity.y);
+            }
+            
+            if (this.y > this.game.height / 2) {
+                this.inWater = true;
+            } else {
+                this.inWater = false;
             }
             /*var velocity = [];
             this.body.getVelocityAtPoint(velocity, [0, 0]);
