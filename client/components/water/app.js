@@ -621,7 +621,6 @@ var WaterSkillGame;
             };
             MainState.prototype.setItemsArray = function (array) {
                 var _this = this;
-                array = array.slice(0, 1);
                 array.forEach(function (skillModel) {
                     var skillPill = _this.skillPillFactory.newInstance(100, 100, skillModel.skill.name, 100);
                     _this.game.add.existing(skillPill);

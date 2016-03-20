@@ -20,8 +20,8 @@ function getImages() {
             var promises = [],
                 skills = linkedin.skills.values;
 
-            console.log(skills);
-            skills = skills.slice(0, 4);
+            //console.log(skills);
+            //skills = skills.slice(0, 4);
 
             skills.forEach(function (skill) {
                 var promise = new Promise(function (resolve, reject) {

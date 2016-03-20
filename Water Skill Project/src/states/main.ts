@@ -69,7 +69,6 @@ module WaterSkillGame.States {
         }
 
         setItemsArray(array: Array<Models.SkillModel>) {
-            array = array.slice(0, 1);
             array.forEach(skillModel => {
                 var skillPill = this.skillPillFactory.newInstance(100, 100, skillModel.skill.name, 100);
                 this.game.add.existing(skillPill);
