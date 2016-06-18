@@ -1,4 +1,4 @@
-module WaterSkillGame.Prefabs {
+namespace WaterSkillGame.Prefabs {
     export class SkillPillFactory {
 
         private game: Phaser.Game;
@@ -10,8 +10,8 @@ module WaterSkillGame.Prefabs {
         }
 
         newInstance(x: number, y: number, term: string, size: number): SkillPill {
-            var buoyancyManager = new Prefabs.BuoyancyManager(0.04, 0.9);
-            var skillPill = new SkillPill(this.game, x, y, buoyancyManager);
+            let buoyancyManager = new Prefabs.BuoyancyManager(0.04, 0.9);
+            let skillPill = new SkillPill(this.game, x, y, buoyancyManager);
             this.imageLoader.load(term, (key) => {
                 skillPill.loadTexture(key);
                 skillPill.scale.setTo(size / skillPill.width);

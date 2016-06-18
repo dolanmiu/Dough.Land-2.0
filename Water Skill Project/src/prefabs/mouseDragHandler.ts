@@ -1,16 +1,16 @@
-module WaterSkillGame.Prefabs {
+namespace WaterSkillGame.Prefabs {
     export class MouseDragHandler extends p2.Body {
 
         private game: Phaser.Game;
         private mouseConstraint: p2.Constraint;
-        
+
         public sprites: Array<Phaser.Sprite>;
 
         constructor(game: Phaser.Game) {
             super();
             this.game = game;
             this.sprites = [];
-            
+
             game.physics.p2.world.addBody(this);
             game.input.onDown.add(this.click, this);
             game.input.onUp.add(this.release, this);
@@ -18,14 +18,14 @@ module WaterSkillGame.Prefabs {
         }
 
         private click(pointer: any) {
-            var bodies = this.game.physics.p2.hitTest(pointer.position, this.sprites);
+            let bodies = this.game.physics.p2.hitTest(pointer.position, this.sprites);
             // p2 uses different coordinate system, so convert the pointer position to p2's coordinate system
-            var physicsPos = [this.game.physics.p2.pxmi(pointer.position.x), this.game.physics.p2.pxmi(pointer.position.y)];
+            let physicsPos = [this.game.physics.p2.pxmi(pointer.position.x), this.game.physics.p2.pxmi(pointer.position.y)];
 
             if (bodies.length) {
-                var clickedBody = bodies[0];
-                var localPointInBody = [0, 0];
-                
+                let clickedBody = bodies[0];
+                let localPointInBody = [0, 0];
+
                 // this function takes physicsPos and coverts it to the body's local coordinate system
                 clickedBody.toLocalFrame(localPointInBody, physicsPos);
 

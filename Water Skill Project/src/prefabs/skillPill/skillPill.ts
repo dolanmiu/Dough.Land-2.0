@@ -1,4 +1,4 @@
-module WaterSkillGame.Prefabs {
+namespace WaterSkillGame.Prefabs {
     export class SkillPill extends Phaser.Sprite {
 
         private water: Water;
@@ -11,9 +11,9 @@ module WaterSkillGame.Prefabs {
             this.inWater = false;
             this.buoyancyManager = buoyancyManager;
             this.game.physics.p2.enable(this);
-            //this.water = water;
+            // this.water = water;
             this.body.angularVelocity = (Math.random() * 8) - 4;
-            //this.body.debug = true;
+            // this.body.debug = true;
 
             /*var text = this.game.add.text(0, 0, "MyText", { font: '14px Raleway', align: 'center' }); 
             text.anchor.setTo(0.5); 
