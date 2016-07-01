@@ -8,7 +8,6 @@ angular.module('doughlandApp', [
   'ui.router',
   'ui.bootstrap',
   'sticky',
-  'n3-pie-chart',
   'duScroll',
   'pageslide-directive',
   'akoenig.deckgrid'
