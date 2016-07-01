@@ -1,38 +1,53 @@
-/*jslint node: true */
-'use strict';
-var docx = require('docx');
+/*global exports, require */
+var officeClippy = require('office-clippy');
+var docx = officeClippy.docx;
+var exporter = officeClippy.exporter;
 
 var Linkedin = require('../../api/linkedin/linkedin.model');
 var utility = require('./utility');
 
 function createTitle(titleText) {
-    return new docx.Paragraph(titleText).title();
+    'use strict';
+
+    var title = docx.createParagraph().title();
+    title.addText(docx.createText(titleText));
+
+    return title;
 }
 
 function createContactInfoParagraph(phoneNumber, profileUrl, email) {
-    var paragraph = new docx.Paragraph().center(),
-        contactInfo = new docx.TextRun('Mobile: ' + phoneNumber + ' | LinkedIn: ' + profileUrl + ' | Email: ' + email),
-        address = new docx.TextRun('Address: 58 Elm Avenue, Kent ME4 6ER, UK').break();
+    'use strict';
 
-    paragraph.addText(contactInfo);
-    paragraph.addText(address);
+    var contactInfoParagraph = docx.createParagraph().center(),
+        contactInfo = docx.createText('Mobile: ' + phoneNumber + ' | LinkedIn: ' + profileUrl + ' | Email: ' + email),
+        address = docx.createText('Address: 58 Elm Avenue, Kent ME4 6ER, UK').break();
 
-    return paragraph;
+    contactInfoParagraph.addText(contactInfo);
+    contactInfoParagraph.addText(address);
+
+    return contactInfoParagraph;
 }
 
 function createSection(sectionText) {
-    return new docx.Paragraph(sectionText).heading1().thematicBreak();
+    'use strict';
+
+    var educationHeadingParagraph = docx.createParagraph(sectionText).heading1().thematicBreak();
+    return educationHeadingParagraph;
 }
 
 function createSubSection(text) {
-    return new docx.Paragraph(text).heading2();
+    'use strict';
+
+    var paragraph = docx.createParagraph(text).heading2();
+    return paragraph;
 }
 
-// needs work
 function createInstitutionHeader(institutionName, dateText) {
-    var paragraph = new docx.Paragraph().maxRightTabStop(),
-        institution = new docx.TextRun(institutionName).bold(),
-        date = new docx.TextRun(dateText).tab().bold();
+    'use strict';
+
+    var paragraph = docx.createParagraph().addTabStop(docx.createMaxRightTabStop()),
+        institution = docx.createText(institutionName).bold(),
+        date = docx.createText(dateText).tab().bold();
 
     paragraph.addText(institution);
     paragraph.addText(date);
@@ -41,8 +56,10 @@ function createInstitutionHeader(institutionName, dateText) {
 }
 
 function createRoleText(roleText) {
-    var paragraph = new docx.Paragraph(),
-        role = new docx.TextRun(roleText).italic();
+    'use strict';
+
+    var paragraph = docx.createParagraph(),
+        role = docx.createText(roleText).italic();
 
     paragraph.addText(role);
 
@@ -50,11 +67,17 @@ function createRoleText(roleText) {
 }
 
 function createBullet(text) {
-    return new docx.Paragraph(text).bullet();
+    'use strict';
+
+    var paragraph = docx.createParagraph(text).bullet();
+
+    return paragraph;
 }
 
 function createSkillList(skills) {
-    var paragraph = new docx.Paragraph(),
+    'use strict';
+
+    var paragraph = docx.createParagraph(),
         i,
         skillConcat = '';
 
@@ -66,25 +89,29 @@ function createSkillList(skills) {
             skillConcat += ', ';
         }
     }
-    paragraph.addText(new docx.TextRun(skillConcat));
+    paragraph.addText(docx.createText(skillConcat));
 
     return paragraph;
 }
 
 function createInterests(interests) {
-    var paragraph = new docx.Paragraph();
+    'use strict';
 
-    paragraph.addText(new docx.TextRun(interests));
+    var paragraph = docx.createParagraph();
+
+    paragraph.addText(docx.createText(interests));
     return paragraph;
 }
 
 function createInstitutionPair(item, description, title) {
-    var paragraph = new docx.Paragraph(),
-        titleText = new docx.TextRun(title).bold(),
-        itemText = new docx.TextRun(item + ' - ').tab(),
-        descriptionText = new docx.TextRun(description).italic();
+    'use strict';
 
-    paragraph.leftTabStop(2268);
+    var paragraph = docx.createParagraph(),
+        titleText = docx.createText(title).bold(),
+        itemText = docx.createText(item + ' - ').tab(),
+        descriptionText = docx.createText(description).italic();
+
+    paragraph.addTabStop(docx.createLeftTabStop(2268));
     if (title !== undefined) {
         paragraph.addText(titleText);
     }
@@ -95,7 +122,8 @@ function createInstitutionPair(item, description, title) {
 }
 
 function createDocument(profile) {
-    var doc = new docx.Document({
+    'use strict';
+    var doc = docx.create({
             creator: 'Dolan Miu',
             description: 'A generated version of my CV from data straight from LinkedIn',
             title: 'Dolan Miu CV'
@@ -162,6 +190,8 @@ function createDocument(profile) {
 }
 
 exports.download = function (req, res, next) {
+    'use strict';
+
     Linkedin.findOne({
         'default': true
     }, {}, function (err, linkedIn) {
@@ -172,9 +202,8 @@ exports.download = function (req, res, next) {
             return res.send(500, 'No Default CV Present');
         }
 
-        var doc = createDocument(linkedIn),
-            exporter = new docx.ExpressPacker(doc, res);
+        var doc = createDocument(linkedIn);
 
-        exporter.pack('Dolan Miu\'s CV');
+        exporter.express(res, doc, 'Dolan Miu\'s CV');
     });
 };
