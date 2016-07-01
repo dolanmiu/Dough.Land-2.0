@@ -18,8 +18,6 @@
     "angular-ui-router": "~0.2.10",
     "fontawesome": "~4.3.0",
     "ngSticky": "~1.7.9",
-    "pie-chart": "~1.0.0",
-    "d3": "~3.5.5",
     "angular-scroll": "~0.7.0",
     "ng-pageslide": "~1.0.3",
     "angular-deckgrid": "~0.5.0"
