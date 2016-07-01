@@ -1,4 +1,4 @@
-module WaterSkillGame.Prefabs {
+namespace WaterSkillGame.Prefabs {
     export class WaterFactory {
 
         private game: Phaser.Game;
@@ -12,17 +12,17 @@ module WaterSkillGame.Prefabs {
         }
 
         newInstance(level: number): Water {
-            var waterHeight = this.game.height - (this.game.height * level);
-            var waterPoints = this.createwaterPoints(this.resolution, waterHeight, this.k);
-            var points = this.createWater(waterPoints);
+            let waterHeight = this.game.height - (this.game.height * level);
+            let waterPoints = this.createwaterPoints(this.resolution, waterHeight, this.k);
+            let points = this.createWater(waterPoints);
             return new Water(this.game, level, this.resolution, points, waterPoints);
         }
 
         private createwaterPoints(resolution: number, waterHeight: number, k: number): WaterPoint[] {
-            var points = Array<WaterPoint>();
-            var singleLength = this.game.width / resolution;
+            let points = Array<WaterPoint>();
+            let singleLength = this.game.width / resolution;
 
-            for (var i = 0; i <= resolution; i++) {
+            for (let i = 0; i <= resolution; i++) {
                 points.push(new WaterPoint(this.game, singleLength * i, waterHeight, waterHeight, k));
             }
             return points;

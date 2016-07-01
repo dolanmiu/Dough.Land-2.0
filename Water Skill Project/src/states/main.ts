@@ -1,4 +1,4 @@
-module WaterSkillGame.States {
+namespace WaterSkillGame.States {
     export interface IMainState extends Phaser.State {
         setItemsArray(array: Array<Models.SkillModel>);
         setWaterLevel(level?: number, delay?: number);
@@ -28,9 +28,9 @@ module WaterSkillGame.States {
 
             this.setUpPhysics();
 
-            var waterFactory = new Prefabs.WaterFactory(this.game);
+            let waterFactory = new Prefabs.WaterFactory(this.game);
             this.water = waterFactory.newInstance(0.5);
-            //this.waterGroup.add(this.water);
+            // this.waterGroup.add(this.water);
 
             this.game.stage.backgroundColor = 0xF5F5F5;
             this.game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
@@ -70,7 +70,7 @@ module WaterSkillGame.States {
 
         setItemsArray(array: Array<Models.SkillModel>) {
             array.forEach(skillModel => {
-                var skillPill = this.skillPillFactory.newInstance(100, 100, skillModel.skill.name, 100);
+                let skillPill = this.skillPillFactory.newInstance(100, 100, skillModel.skill.name, 100);
                 this.game.add.existing(skillPill);
                 this.mouseDragHandler.sprites.push(skillPill);
                 this.skillPills.push(skillPill);

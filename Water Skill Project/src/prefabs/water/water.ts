@@ -1,4 +1,4 @@
-module WaterSkillGame.Prefabs {
+namespace WaterSkillGame.Prefabs {
     export class Water extends Phaser.Polygon {
 
         private game: Phaser.Game;
@@ -21,16 +21,16 @@ module WaterSkillGame.Prefabs {
         }
 
         update(...graphicsCollection: Phaser.Graphics[]) {
-            for (var i = 0; i < this.waterPoints.length - 2; i++) {
+            for (let i = 0; i < this.waterPoints.length - 2; i++) {
                 this.waterPoints[i].update(0.025, 0.025);
             }
 
-            var leftDeltas = Array<number>();
-            var rightDeltas = Array<number>();
+            let leftDeltas = Array<number>();
+            let rightDeltas = Array<number>();
 
             // do some passes where this.waterPoints pull on their neighbours
-            for (var j = 0; j < this.passThroughs; j++) {
-                for (var i = 0; i < this.waterPoints.length - 3; i++) {
+            for (let j = 0; j < this.passThroughs; j++) {
+                for (let i = 0; i < this.waterPoints.length - 3; i++) {
                     if (i > 0) {
                         leftDeltas[i] = this.spread * (this.waterPoints[i].y - this.waterPoints[i - 1].y);
                         this.waterPoints[i - 1].speed += leftDeltas[i];
@@ -41,7 +41,7 @@ module WaterSkillGame.Prefabs {
                     }
                 }
 
-                for (var i = 0; i < this.waterPoints.length - 3; i++) {
+                for (let i = 0; i < this.waterPoints.length - 3; i++) {
                     if (i > 0)
                         this.waterPoints[i - 1].y += leftDeltas[i];
                     if (i < this.waterPoints.length - 1)
@@ -59,8 +59,8 @@ module WaterSkillGame.Prefabs {
         }
 
         private fixWaterPositions() {
-            var singleLength = this.game.width / this.resolution;
-            for (var i = 0; i <= this.waterPoints.length - 3; i++) {
+            let singleLength = this.game.width / this.resolution;
+            for (let i = 0; i <= this.waterPoints.length - 3; i++) {
                 this.waterPoints[i].x = singleLength * i;
             }
 
@@ -77,8 +77,8 @@ module WaterSkillGame.Prefabs {
         }
 
         public splash(position: number, speed: number) {
-            var singleLength = this.game.width / this.resolution;
-            var index = Math.round(position / singleLength);
+            let singleLength = this.game.width / this.resolution;
+            let index = Math.round(position / singleLength);
             if (index >= 0 && index < this.waterPoints.length) {
                 this.waterPoints[index].speed = speed;
             }
@@ -92,7 +92,7 @@ module WaterSkillGame.Prefabs {
                 this.level = percentage;
             }
 
-            for (var i = 0; i < this.waterPoints.length - 2; i++) {
+            for (let i = 0; i < this.waterPoints.length - 2; i++) {
                 this.waterPoints[i].setLevel(this.calculateWaterHeight(), delay, callback);
             };
         }
@@ -102,8 +102,8 @@ module WaterSkillGame.Prefabs {
         }
 
         public getWaterLevel(position: number): Phaser.Point {
-            var singleLength = this.game.width / this.resolution;
-            var index = Math.round(position / singleLength);
+            let singleLength = this.game.width / this.resolution;
+            let index = Math.round(position / singleLength);
             if (index >= this.waterPoints.length || index < 0) {
                 return new Phaser.Point(0, this.waterPoints[0].y);
             }

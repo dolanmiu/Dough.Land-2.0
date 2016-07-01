@@ -95,10 +95,10 @@ var WaterSkillGame;
                 _super.call(this, game);
             }
             ProxyImageLoader.prototype.normaliseKey = function (key) {
-                return key.replace('#', 'sharp');
+                return key.replace("#", "sharp");
             };
             ProxyImageLoader.prototype.load = function (key, callback) {
-                this.image(key, '/api/proxy/images/' + this.normaliseKey(key), false);
+                this.image(key, "/api/proxy/images/" + this.normaliseKey(key), false);
                 this.onLoadComplete.addOnce(function () {
                     callback(key);
                 });
@@ -136,7 +136,7 @@ var WaterSkillGame;
                     // Partially submerged
                     var width = bounds.width;
                     var height = Math.abs(bounds.y - planePosition.y);
-                    //areaUnderWater = width * height;
+                    // areaUnderWater = width * height;
                     areaUnderWater = body.sprite.width * body.sprite.height;
                     centerOfBuoyancy = body.sprite.position;
                 }
@@ -146,17 +146,14 @@ var WaterSkillGame;
                 }
                 // Compute lift force
                 this.liftForce = Phaser.Point.subtract(centerOfBuoyancy, planePosition);
-                //console.log(this.liftForce.y);
-                //console.log(areaUnderWater);
-                //this.liftForce.setMagnitude(areaUnderWater * this.k);
+                // this.liftForce.setMagnitude(areaUnderWater * this.k);
                 // Make center of bouycancy relative to the body
                 centerOfBuoyancy = Phaser.Point.subtract(centerOfBuoyancy, body.sprite.position);
                 // Apply forces
                 body.velocity.x = body.velocity.x * this.c;
                 body.velocity.y = body.velocity.y * this.c;
                 body.angularDamping = 0.9;
-                //body.applyForce([this.viscousForce.x, this.viscousForce.y], centerOfBuoyancy.x, centerOfBuoyancy.y);
-                //console.log(areaUnderWater);
+                // body.applyForce([this.viscousForce.x, this.viscousForce.y], centerOfBuoyancy.x, centerOfBuoyancy.y);
                 if (this.liftForce.y > 0) {
                     body.applyForce([0, this.liftForce.y], centerOfBuoyancy.x, centerOfBuoyancy.y);
                 }
@@ -177,9 +174,9 @@ var WaterSkillGame;
                 this.inWater = false;
                 this.buoyancyManager = buoyancyManager;
                 this.game.physics.p2.enable(this);
-                //this.water = water;
+                // this.water = water;
                 this.body.angularVelocity = (Math.random() * 8) - 4;
-                //this.body.debug = true;
+                // this.body.debug = true;
                 /*var text = this.game.add.text(0, 0, "MyText", { font: '14px Raleway', align: 'center' });
                 text.anchor.setTo(0.5);
                 text.setShadow(5, 5, 'rgba(0,0,0,0.5)', 5);
@@ -253,18 +250,18 @@ var WaterSkillGame;
         var PriceText = (function () {
             function PriceText(game, maskGraphics) {
                 this.game = game;
-                this.waterText = this.game.add.text(this.game.width / 2, this.game.height / 2, '', { font: 'Source Sans Pro', fill: '#3399ff', align: 'center' });
+                this.waterText = this.game.add.text(this.game.width / 2, this.game.height / 2, "", { font: "Source Sans Pro", fill: "#3399ff", align: "center" });
                 this.waterText.anchor.x = 0.5;
                 this.waterText.anchor.y = 0.5;
-                this.waterText.setShadow(0, 3, '#005b99', 0);
-                this.text = this.game.add.text(this.game.width / 2, this.game.height / 2, '', { font: 'Source Sans Pro', fill: '#ffffff', align: 'center' });
+                this.waterText.setShadow(0, 3, "#005b99", 0);
+                this.text = this.game.add.text(this.game.width / 2, this.game.height / 2, "", { font: "Source Sans Pro", fill: "#ffffff", align: "center" });
                 this.text.anchor.x = 0.5;
                 this.text.anchor.y = 0.5;
-                this.waterSlotText = this.game.add.text(this.game.width / 2, this.game.height / 3, '', { font: 'Source Sans Pro', fill: '#3399ff', align: 'center' });
+                this.waterSlotText = this.game.add.text(this.game.width / 2, this.game.height / 3, "", { font: "Source Sans Pro", fill: "#3399ff", align: "center" });
                 this.waterSlotText.anchor.x = 0.5;
                 this.waterSlotText.anchor.y = 0.5;
-                this.waterSlotText.setShadow(0, 3, '#005b99', 0);
-                this.slotText = this.game.add.text(this.game.width / 2, this.game.height / 3, '', { font: 'Source Sans Pro', fill: '#ffffff', align: 'center' });
+                this.waterSlotText.setShadow(0, 3, "#005b99", 0);
+                this.slotText = this.game.add.text(this.game.width / 2, this.game.height / 3, "", { font: "Source Sans Pro", fill: "#ffffff", align: "center" });
                 this.slotText.anchor.x = 0.5;
                 this.slotText.anchor.y = 0.5;
                 this.text.mask = maskGraphics;
@@ -285,11 +282,11 @@ var WaterSkillGame;
                 this.waterSlotText.fontSize = this.game.height / 12;
             };
             PriceText.prototype.setPriceText = function (price) {
-                this.text.setText('$' + price.toFixed(2));
-                this.waterText.setText('$' + price.toFixed(2));
+                this.text.setText("$" + price.toFixed(2));
+                this.waterText.setText("$" + price.toFixed(2));
             };
             PriceText.prototype.setSlotText = function (currentTotal, maxTotal) {
-                var text = currentTotal + '/' + maxTotal;
+                var text = currentTotal + "/" + maxTotal;
                 this.slotText.setText(text);
                 this.waterSlotText.setText(text);
             };
@@ -305,11 +302,11 @@ var WaterSkillGame;
         var TimerText = (function () {
             function TimerText(game, maskGraphics) {
                 this.game = game;
-                this.text = game.add.text(game.width / 2, game.height / 3 * 2, '3:03', { font: 'Source Sans Pro', fill: '#3399ff', align: 'center', fontSize: game.height / 20 });
+                this.text = game.add.text(game.width / 2, game.height / 3 * 2, "3:03", { font: "Source Sans Pro", fill: "#3399ff", align: "center", fontSize: game.height / 20 });
                 this.text.anchor.x = 0.5;
                 this.text.anchor.y = 0.5;
-                this.text.setShadow(0, 2, '#005b99', 0);
-                this.maskedText = game.add.text(game.width / 2, game.height / 3 * 2, '3:03', { font: 'Source Sans Pro', fill: '#ffffff', align: 'center', fontSize: game.height / 20 });
+                this.text.setShadow(0, 2, "#005b99", 0);
+                this.maskedText = game.add.text(game.width / 2, game.height / 3 * 2, "3:03", { font: "Source Sans Pro", fill: "#ffffff", align: "center", fontSize: game.height / 20 });
                 this.maskedText.anchor.x = 0.5;
                 this.maskedText.anchor.y = 0.5;
                 this.maskedText.mask = maskGraphics;
@@ -327,7 +324,7 @@ var WaterSkillGame;
                     text.text = this.formatTime(Math.round((this.timerEvent.delay - this.timer.ms) / 1000));
                 }
                 else {
-                    text.text = '';
+                    text.text = "";
                 }
             };
             TimerText.prototype.setTime = function (time) {
@@ -364,12 +361,12 @@ var WaterSkillGame;
         var WinnerText = (function (_super) {
             __extends(WinnerText, _super);
             function WinnerText(game, y) {
-                var style = { font: 'Source Sans Pro', fill: '#3399ff', align: 'center', fontSize: game.width / 64 };
-                _super.call(this, game, game.width / 2, y, '', style);
+                var style = { font: "Source Sans Pro", fill: "#3399ff", align: "center", fontSize: game.width / 64 };
+                _super.call(this, game, game.width / 2, y, "", style);
                 game.add.existing(this);
                 this.anchor.x = 0.5;
                 this.anchor.y = 0;
-                this.setShadow(0, 1, '#005b99', 0);
+                this.setShadow(0, 1, "#005b99", 0);
             }
             WinnerText.prototype.slideUp = function (y, delay) {
                 var newTween = this.game.add.tween(this).to({ y: y }, 2000, Phaser.Easing.Cubic.Out);
@@ -384,7 +381,7 @@ var WaterSkillGame;
             };
             WinnerText.prototype.clear = function () {
                 this.y = this.game.height;
-                this.text = '';
+                this.text = "";
             };
             return WinnerText;
         }(Phaser.Text));
@@ -511,27 +508,6 @@ var WaterSkillGame;
                 this.speed += tension * deltaY - this.speed * dampening;
                 this.y += this.speed;
             };
-            WaterPoint.prototype.setLevel = function (height, delay, callback) {
-                var newTween = this.game.add.tween(this).to({ targetHeight: height }, delay, Phaser.Easing.Cubic.Out);
-                newTween.start();
-                if (callback) {
-                    newTween.onComplete.add(callback);
-                }
-                /*newTween.onComplete.add(() => {
-                    console.log("done");
-                    var tween = this.tweenQueue.shift();
-    
-                    if (!_.isUndefined(tween)) {
-                        tween.start();
-                    }
-                });
-                
-                this.tweenQueue.push(newTween);
-    
-                if (this.tweenQueue.length == 1) {
-                    this.tweenQueue[0].start();
-                }*/
-            };
             return WaterPoint;
         }(Phaser.Point));
         Prefabs.WaterPoint = WaterPoint;
@@ -590,7 +566,7 @@ var WaterSkillGame;
                 this.setUpPhysics();
                 var waterFactory = new WaterSkillGame.Prefabs.WaterFactory(this.game);
                 this.water = waterFactory.newInstance(0.5);
-                //this.waterGroup.add(this.water);
+                // this.waterGroup.add(this.water);
                 this.game.stage.backgroundColor = 0xF5F5F5;
                 this.game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
                 this.game.tweens.frameBased = true;

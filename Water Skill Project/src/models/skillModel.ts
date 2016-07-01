@@ -1,7 +1,7 @@
-module WaterSkillGame.Models {
+namespace WaterSkillGame.Models {
     export class SkillModel {
         public skill: {
             name: string
-        }
+        };
     }
 }

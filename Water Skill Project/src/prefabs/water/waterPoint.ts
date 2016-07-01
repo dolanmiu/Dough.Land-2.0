@@ -1,4 +1,4 @@
-module WaterSkillGame.Prefabs {
+namespace WaterSkillGame.Prefabs {
      export class WaterPoint extends Phaser.Point {
 
         private k: number;
@@ -20,31 +20,9 @@ module WaterSkillGame.Prefabs {
         }
 
         update(dampening: number, tension: number) {
-            var deltaY = this.targetHeight - this.y;
+            let deltaY = this.targetHeight - this.y;
             this.speed += tension * deltaY - this.speed * dampening;
             this.y += this.speed;
-        }
-
-        setLevel(height, delay, callback?: () => void) {
-            var newTween = this.game.add.tween(this).to({ targetHeight: height }, delay, Phaser.Easing.Cubic.Out);
-            newTween.start();
-            if (callback) {
-                newTween.onComplete.add(callback);
-            }
-            /*newTween.onComplete.add(() => {
-                console.log("done");
-                var tween = this.tweenQueue.shift();
-
-                if (!_.isUndefined(tween)) {
-                    tween.start();
-                }
-            });
-            
-            this.tweenQueue.push(newTween);
-
-            if (this.tweenQueue.length == 1) {
-                this.tweenQueue[0].start();
-            }*/
         }
     }
 }

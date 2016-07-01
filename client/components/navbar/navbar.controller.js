@@ -1,5 +1,5 @@
 /*globals angular */
-angular.module('doughlandApp').controller('NavbarCtrl', function ($scope, $location, $window) {
+angular.module('doughlandApp').controller('NavbarController', function ($scope, $location, $window) {
     'use strict';
 
     $scope.menu = [{

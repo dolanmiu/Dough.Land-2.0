@@ -1,4 +1,4 @@
-module WaterSkillGame {
+namespace WaterSkillGame {
     export class Game {
         private game: Phaser.Game;
         private width: number;
@@ -16,14 +16,14 @@ module WaterSkillGame {
         }
 
         setItemsArray(array: Array<Models.SkillModel>) {
-            var state = <States.IMainState>this.game.state.getCurrentState();
+            let state = <States.IMainState>this.game.state.getCurrentState();
             if (state) {
                 state.setItemsArray(array);
             }
         }
 
         setWaterLevel(percentage: number, delay?: number) {
-            var state = <States.IMainState>this.game.state.getCurrentState();
+            let state = <States.IMainState>this.game.state.getCurrentState();
             if (state) {
                 state.setWaterLevel(percentage, delay);
             }
